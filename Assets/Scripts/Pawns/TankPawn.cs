@@ -8,12 +8,14 @@ public class TankPawn : Pawn
     private float MoveSpeed;
     [SerializeField]
     private float TurnSpeed;
-
+    [SerializeField]
+    private Shooter shooter;
 
     // Start is called before the first frame update
     public override void Start()
     {
         base.Start();
+        shooter = GetComponent<Shooter>();
     }
 
     // Update is called once per frame
