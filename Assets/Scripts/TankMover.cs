@@ -2,17 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TankMover : MonoBehaviour
+public class TankMover : Mover
 {
-    // Start is called before the first frame update
-    void Start()
+    //Makes the tank obey physics
+    private Rigidbody rb;
+
+    public override void Start()
     {
-        
+        rb = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Move(Vector3 direction, float speed)
     {
-        
+        Debug.Log(speed);
+
+        Vector3 moveVector = direction.normalized * speed * Time.deltaTime;
+        rb.MovePosition(rb.position + moveVector);
+    }
+
+    public override void Rotate(float speed)
+    {
+        transform.Rotate(new Vector3(0, speed * Time.deltaTime, 0));
     }
 }

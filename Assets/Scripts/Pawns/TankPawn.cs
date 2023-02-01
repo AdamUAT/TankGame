@@ -5,9 +5,9 @@ using UnityEngine;
 public class TankPawn : Pawn
 {
     [SerializeField]
-    private float MoveSpeed;
+    private float moveSpeed;
     [SerializeField]
-    private float TurnSpeed;
+    private float turnSpeed;
 
     [SerializeField]
     private GameObject shellPrefab;
@@ -19,6 +19,10 @@ public class TankPawn : Pawn
     private float shellLifespan;
 
     private Shooter shooter;
+    [SerializeField]
+    private float fireRate;
+    private float reloadCountdown;
+    private bool canFire;
 
     // Start is called before the first frame update
     public override void Start()
@@ -30,31 +34,70 @@ public class TankPawn : Pawn
     // Update is called once per frame
     public override void Update()
     {
+        if (!canFire)
+        {
+            reloadCountdown -= Time.deltaTime;
+            if (reloadCountdown <= 0)
+                Reload();
+        }
+
         base.Update();
     }
 
     public override void MoveForward()
     {
-        Debug.Log("Moving forward");
+        if (mover != null)
+            mover.Move(transform.forward, moveSpeed);
+        else
+            Debug.LogWarning("Custom Warning: No Mover in TankPawn.MoveForward()");
     }
 
     public override void MoveBackward()
     {
-        Debug.Log("Moving backward");
+        if (mover != null)
+            mover.Move(transform.forward, -moveSpeed);
+        else
+            Debug.LogWarning("Custom Warning: No Mover in TankPawn.MoveBackward()");
     }
 
     public override void RotateClockwise()
     {
-        Debug.Log("Rotating clockwise");
+        if (mover != null)
+            mover.Rotate(turnSpeed);
+        else
+            Debug.LogWarning("Custom Warning: No Mover in TankPawn.RotateClockwise()");
     }
 
     public override void RotateCounterClockwise()
     {
-        Debug.Log("Rotating counter clockwise");
+        if (mover != null)
+            mover.Rotate(-turnSpeed);
+        else
+            Debug.LogWarning("Custom Warning: No Mover in TankPawn.RotateCounterClockwise()");
     }
 
     public override void Shoot()
     {
-        shooter.Shoot(shellPrefab, fireForce, damageDone, shellLifespan);
+        if (canFire)
+        {
+            canFire = false;
+            reloadCountdown = fireRate;
+
+            if (shooter != null)
+                shooter.Shoot(shellPrefab, fireForce, damageDone, shellLifespan);
+            else
+                Debug.LogWarning("Custom Warning: No Shooter in TankPawn.Shoot");
+        }
+        else
+        {
+            Debug.Log("You cannot fire yet.");
+            //Put stuff here that happens when the player tries to fire but can't, like a gun pin click sound effect.
+        }
+    }
+
+    private void Reload()
+    {
+        canFire = true;
+        //Put anything here that happens when the player can fire again, such as a sound effect.
     }
 }
