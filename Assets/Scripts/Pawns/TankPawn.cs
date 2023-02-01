@@ -8,7 +8,16 @@ public class TankPawn : Pawn
     private float MoveSpeed;
     [SerializeField]
     private float TurnSpeed;
+
     [SerializeField]
+    private GameObject shellPrefab;
+    [SerializeField]
+    private float fireForce;
+    [SerializeField]
+    private float damageDone;
+    [SerializeField]
+    private float shellLifespan;
+
     private Shooter shooter;
 
     // Start is called before the first frame update
@@ -42,5 +51,10 @@ public class TankPawn : Pawn
     public override void RotateCounterClockwise()
     {
         Debug.Log("Rotating counter clockwise");
+    }
+
+    public override void Shoot()
+    {
+        shooter.Shoot(shellPrefab, fireForce, damageDone, shellLifespan);
     }
 }
