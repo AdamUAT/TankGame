@@ -14,6 +14,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public static GameManager instance;
 
+    // List that holds our player(s)
+    public List<PlayerController> players;
+
     //Prefabs
     public GameObject playerControllerPrefab;
     public GameObject tankPawnPrefab;
