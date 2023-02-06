@@ -90,7 +90,6 @@ public class TankPawn : Pawn
         }
         else
         {
-            Debug.Log("You cannot fire yet.");
             //Put stuff here that happens when the player tries to fire but can't, like a gun pin click sound effect.
         }
     }
