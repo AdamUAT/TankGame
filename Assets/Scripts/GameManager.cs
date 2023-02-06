@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
 
     // List that holds our player(s)
     public List<PlayerController> players;
+    //All the entities that are not players.
+    public List<Controller> npcs;
+    //All pawns can be derived from the controllers.
 
     //Prefabs
     public GameObject playerControllerPrefab;
