@@ -5,11 +5,6 @@ using UnityEngine;
 public class TankPawn : Pawn
 {
     [SerializeField]
-    private float moveSpeed;
-    [SerializeField]
-    private float turnSpeed;
-
-    [SerializeField]
     private GameObject shellPrefab;
     [SerializeField]
     private float fireForce;
@@ -75,7 +70,6 @@ public class TankPawn : Pawn
         else
             Debug.LogWarning("Custom Warning: No Mover in TankPawn.RotateCounterClockwise()");
     }
-
     public override void Shoot()
     {
         if (canFire)
