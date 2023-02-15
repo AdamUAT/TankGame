@@ -18,12 +18,14 @@ public class TankPawn : Pawn
     private float fireRate;
     private float reloadCountdown;
     private bool canFire;
+    private CameraController cameraController;
 
     // Start is called before the first frame update
     public override void Start()
     {
         base.Start();
         shooter = GetComponent<Shooter>();
+        cameraController = GetComponent<CameraController>();
     }
 
     // Update is called once per frame
@@ -37,6 +39,12 @@ public class TankPawn : Pawn
         }
 
         base.Update();
+    }
+
+    //This update is only for cameras, as it helps stop making things jittery.
+    public void LateUpdate()
+    {
+        cameraController.UpdateCameraPosition(); //Moves the camera smoothly towards where it should be.
     }
 
     public override void MoveForward()

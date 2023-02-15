@@ -36,6 +36,13 @@ public class PlayerController : Controller
         ProcessInputs();
     }
 
+    public override void LateUpdate()
+    {
+        base.LateUpdate();
+
+        ProcessLateInputs();
+    }
+
     public void OnDestroy()
     {
         if(GameManager.instance != null)
@@ -47,18 +54,11 @@ public class PlayerController : Controller
         }
     }
 
+    /// <summary>
+    /// Checks to see if the player put in any inputs, and then doesn non-physics-based effects based on those inputs.
+    /// </summary>
     public void ProcessInputs()
     {
-        if(Input.GetKey(moveForwardKey))
-        {
-            pawn.MoveForward();
-        }
-        
-        if(Input.GetKey(moveBackwardKey))
-        {
-            pawn.MoveBackward();
-        }
-
         if(Input.GetKey(rotateClockwiseKey))
         {
             pawn.RotateClockwise();
@@ -72,6 +72,21 @@ public class PlayerController : Controller
         if(Input.GetKeyDown(shootKey))
         {
             pawn.Shoot();
+        }
+    }
+    /// <summary>
+    /// Checks to see if the player put in any inputs, and then does physics-based effects based on those inputs.
+    /// </summary>
+    public void ProcessLateInputs()
+    {
+        if (Input.GetKey(moveForwardKey))
+        {
+            pawn.MoveForward();
+        }
+
+        if (Input.GetKey(moveBackwardKey))
+        {
+            pawn.MoveBackward();
         }
     }
 }
