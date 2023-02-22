@@ -36,11 +36,11 @@ public class PlayerController : Controller
         ProcessInputs();
     }
 
-    public override void LateUpdate()
+    public override void FixedUpdate()
     {
-        base.LateUpdate();
+        base.FixedUpdate();
 
-        ProcessLateInputs();
+        ProcessFixedInputs();
     }
 
     public void OnDestroy()
@@ -77,7 +77,7 @@ public class PlayerController : Controller
     /// <summary>
     /// Checks to see if the player put in any inputs, and then does physics-based effects based on those inputs.
     /// </summary>
-    public void ProcessLateInputs()
+    public void ProcessFixedInputs()
     {
         if (Input.GetKey(moveForwardKey))
         {
