@@ -9,6 +9,9 @@ public class AIController : Controller
     protected float lastStateChangeTime;
     public GameObject target;
 
+    [SerializeField]
+    protected float hearingRange = 20.0f;
+
     void Start()
     {
         currentState = AIState.Idle;
@@ -65,4 +68,24 @@ public class AIController : Controller
         pawn.MoveForward();
     }
     #endregion Behaviors
+
+    #region Senses
+    /// <summary>
+    /// Tells this AI controller the player fired a shot near them. 
+    /// </summary>
+    public virtual void HeardPlayerShoot(Vector3 playerPosition)
+    {
+        //Sets the hearing range of the AI.
+        hearingRange = 25;
+        //Checks to see if the AI heard the shot.
+        if(Vector3.Distance(playerPosition, transform.position) > hearingRange)
+        {
+            //Do something here such as switching states and behaviors.
+        }
+    }
+    public virtual void SawPlayer()
+    {
+
+    }
+    #endregion Senses
 }
