@@ -9,6 +9,6 @@ public abstract class Controller : MonoBehaviour
     // Start is called before the first frame update
     public virtual void Start() {}
     public virtual void Update() {}
-    public virtual void LateUpdate() {}
+    public virtual void FixedUpdate() {}
 
 }
