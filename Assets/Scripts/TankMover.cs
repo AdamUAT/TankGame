@@ -5,17 +5,17 @@ using UnityEngine;
 public class TankMover : Mover
 {
     //Makes the tank obey physics
-    private Rigidbody rb;
+    private CharacterController cc;
 
     public override void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        cc = GetComponent<CharacterController>();
     }
 
     public override void Move(Vector3 direction, float speed)
     {
-        Vector3 moveVector = direction.normalized * speed * Time.deltaTime;
-        rb.MovePosition(rb.position + moveVector);
+        //Moving the player with a Character Controller component is much easier than the Rigidbody, because now we don't have to worry about physics.
+        cc.SimpleMove(direction * speed);
     }
 
     public override void Rotate(float speed)
