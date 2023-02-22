@@ -36,13 +36,6 @@ public class PlayerController : Controller
         ProcessInputs();
     }
 
-    public override void FixedUpdate()
-    {
-        base.FixedUpdate();
-
-        ProcessFixedInputs();
-    }
-
     public void OnDestroy()
     {
         if(GameManager.instance != null)
@@ -73,12 +66,7 @@ public class PlayerController : Controller
         {
             pawn.Shoot();
         }
-    }
-    /// <summary>
-    /// Checks to see if the player put in any inputs, and then does physics-based effects based on those inputs.
-    /// </summary>
-    public void ProcessFixedInputs()
-    {
+
         if (Input.GetKey(moveForwardKey))
         {
             pawn.MoveForward();
