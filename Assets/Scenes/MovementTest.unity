@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 128086983}
   - component: {fileID: 128086982}
   - component: {fileID: 128086981}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall_S
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -224,7 +224,7 @@ GameObject:
   - component: {fileID: 266048712}
   - component: {fileID: 266048711}
   - component: {fileID: 266048710}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall_E
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -316,7 +316,7 @@ GameObject:
   - component: {fileID: 275459013}
   - component: {fileID: 275459012}
   - component: {fileID: 275459011}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -405,7 +405,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 440024279}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Arena
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -444,7 +444,7 @@ GameObject:
   - component: {fileID: 626733565}
   - component: {fileID: 626733564}
   - component: {fileID: 626733563}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -536,7 +536,7 @@ GameObject:
   - component: {fileID: 643812285}
   - component: {fileID: 643812284}
   - component: {fileID: 643812283}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -858,7 +858,7 @@ GameObject:
   - component: {fileID: 1668816324}
   - component: {fileID: 1668816323}
   - component: {fileID: 1668816322}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1042,7 +1042,7 @@ GameObject:
   - component: {fileID: 1724378758}
   - component: {fileID: 1724378757}
   - component: {fileID: 1724378756}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall_N
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1181,7 +1181,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1904882242}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PlayerSpawnArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1217,7 +1217,7 @@ GameObject:
   - component: {fileID: 2122694258}
   - component: {fileID: 2122694257}
   - component: {fileID: 2122694256}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall_W
   m_TagString: Untagged
   m_Icon: {fileID: 0}

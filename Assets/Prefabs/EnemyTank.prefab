@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5246610082642442078}
   - component: {fileID: 6347544705599561500}
   - component: {fileID: 1275878366475757513}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: EnemyTank
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -148,7 +148,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2001519237419235133}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

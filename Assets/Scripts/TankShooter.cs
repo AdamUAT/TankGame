@@ -37,5 +37,15 @@ public class TankShooter : Shooter
         }
 
         Destroy(newShell, lifeSpan);
+
+        //This returns all 
+        foreach(Collider enemy in Physics.OverlapSphere(transform.position, 50, LayerMask.NameToLayer("Enemies")))
+        {
+            AIController ai = enemy.GetComponent<AIController>();
+            if(ai != null)
+            {
+                ai.HeardPlayerShoot(transform.position);
+            }
+        }
     }
 }
