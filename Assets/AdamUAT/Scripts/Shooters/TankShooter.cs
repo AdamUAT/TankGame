@@ -38,13 +38,13 @@ public class TankShooter : Shooter
 
         Destroy(newShell, lifeSpan);
 
-        //This returns all 
-        foreach(Collider enemy in Physics.OverlapSphere(transform.position, 50, LayerMask.NameToLayer("Enemies")))
+        //This returns all enemies in a 50 unit range.
+        foreach (AIController enemy in GameManager.instance.npcs)
         {
-            AIController ai = enemy.GetComponent<AIController>();
-            if(ai != null)
+            //Checks to see if the AI was in range to hear the shot.
+            if (Vector3.Distance(transform.position, enemy.gameObject.transform.position) <= enemy.hearingRange)
             {
-                ai.HeardPlayerShoot(transform.position);
+                enemy.HeardPlayerShoot();
             }
         }
     }
