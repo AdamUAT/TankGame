@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 98386478}
   - component: {fileID: 98386477}
   - component: {fileID: 98386476}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -224,7 +224,7 @@ GameObject:
   - component: {fileID: 128086983}
   - component: {fileID: 128086982}
   - component: {fileID: 128086981}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall_S
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -316,7 +316,7 @@ GameObject:
   - component: {fileID: 266048712}
   - component: {fileID: 266048711}
   - component: {fileID: 266048710}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall_E
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -408,7 +408,7 @@ GameObject:
   - component: {fileID: 275459013}
   - component: {fileID: 275459012}
   - component: {fileID: 275459011}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -500,7 +500,7 @@ GameObject:
   - component: {fileID: 313217175}
   - component: {fileID: 313217174}
   - component: {fileID: 313217173}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -592,7 +592,7 @@ GameObject:
   - component: {fileID: 382582443}
   - component: {fileID: 382582442}
   - component: {fileID: 382582441}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -682,7 +682,7 @@ GameObject:
   m_Component:
   - component: {fileID: 440024279}
   - component: {fileID: 440024280}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Arena
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -750,7 +750,7 @@ GameObject:
   - component: {fileID: 467173441}
   - component: {fileID: 467173440}
   - component: {fileID: 467173439}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -830,75 +830,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 467173437}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1001 &529537358
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4072081264940715398, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_Name
-      value: EnemyTank
-      objectReference: {fileID: 0}
-    - target: {fileID: 1070072809579249557, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -19.848343
-      objectReference: {fileID: 0}
-    - target: {fileID: 1070072809579249557, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.02753052
-      objectReference: {fileID: 0}
-    - target: {fileID: 1070072809579249557, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -15.16693
-      objectReference: {fileID: 0}
-    - target: {fileID: 1070072809579249557, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1070072809579249557, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1070072809579249557, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1070072809579249557, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1070072809579249557, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1070072809579249557, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1070072809579249557, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1070072809579249557, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: dccaa1d0f3491014c9e69babcf50811b, type: 3}
 --- !u!1 &626733561
 GameObject:
   m_ObjectHideFlags: 0
@@ -911,7 +842,7 @@ GameObject:
   - component: {fileID: 626733565}
   - component: {fileID: 626733564}
   - component: {fileID: 626733563}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1003,7 +934,7 @@ GameObject:
   - component: {fileID: 643812285}
   - component: {fileID: 643812284}
   - component: {fileID: 643812283}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1192,6 +1123,58 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &774219688 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4072081264940715398, guid: dccaa1d0f3491014c9e69babcf50811b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1405754334}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &774219689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 774219688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58db2f207c3c40b49bb473ff55aac664, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pawn: {fileID: 774219690}
+  currentState: 0
+  target: {fileID: 0}
+  sightCacheDelay: 0.5
+  hearingRange: 20
+  fieldOfView: 45
+  eyesight: 15
+  navMesh: {fileID: 440024280}
+  WanderRadiusMax: 30
+  WanderRadiusMin: 15
+--- !u!114 &774219690 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5082153452566442783, guid: dccaa1d0f3491014c9e69babcf50811b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1405754334}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 774219688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbe40646591cca14995f68957c058771, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &774219698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 774219688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2f388cd1f9b9ba478cc2254fa810822, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &930851790
 GameObject:
   m_ObjectHideFlags: 0
@@ -1204,7 +1187,7 @@ GameObject:
   - component: {fileID: 930851794}
   - component: {fileID: 930851793}
   - component: {fileID: 930851792}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (16)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1296,7 +1279,7 @@ GameObject:
   - component: {fileID: 960973416}
   - component: {fileID: 960973415}
   - component: {fileID: 960973414}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1388,7 +1371,7 @@ GameObject:
   - component: {fileID: 1142138456}
   - component: {fileID: 1142138455}
   - component: {fileID: 1142138454}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1480,7 +1463,7 @@ GameObject:
   - component: {fileID: 1221686694}
   - component: {fileID: 1221686693}
   - component: {fileID: 1221686692}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1602,7 +1585,7 @@ GameObject:
   - component: {fileID: 1329097278}
   - component: {fileID: 1329097277}
   - component: {fileID: 1329097276}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1682,6 +1665,76 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1329097274}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &1405754334
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4072081264940715398, guid: dccaa1d0f3491014c9e69babcf50811b,
+        type: 3}
+      propertyPath: m_Name
+      value: EnemyTank
+      objectReference: {fileID: 0}
+    - target: {fileID: 1070072809579249557, guid: dccaa1d0f3491014c9e69babcf50811b,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -19.458033
+      objectReference: {fileID: 0}
+    - target: {fileID: 1070072809579249557, guid: dccaa1d0f3491014c9e69babcf50811b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.02753052
+      objectReference: {fileID: 0}
+    - target: {fileID: 1070072809579249557, guid: dccaa1d0f3491014c9e69babcf50811b,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -13.004699
+      objectReference: {fileID: 0}
+    - target: {fileID: 1070072809579249557, guid: dccaa1d0f3491014c9e69babcf50811b,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1070072809579249557, guid: dccaa1d0f3491014c9e69babcf50811b,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1070072809579249557, guid: dccaa1d0f3491014c9e69babcf50811b,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1070072809579249557, guid: dccaa1d0f3491014c9e69babcf50811b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1070072809579249557, guid: dccaa1d0f3491014c9e69babcf50811b,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1070072809579249557, guid: dccaa1d0f3491014c9e69babcf50811b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1070072809579249557, guid: dccaa1d0f3491014c9e69babcf50811b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1070072809579249557, guid: dccaa1d0f3491014c9e69babcf50811b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: -1165210256313676452, guid: dccaa1d0f3491014c9e69babcf50811b, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: dccaa1d0f3491014c9e69babcf50811b, type: 3}
 --- !u!1 &1495442602
 GameObject:
   m_ObjectHideFlags: 0
@@ -1785,7 +1838,7 @@ GameObject:
   - component: {fileID: 1518202462}
   - component: {fileID: 1518202461}
   - component: {fileID: 1518202460}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1877,7 +1930,7 @@ GameObject:
   - component: {fileID: 1668816324}
   - component: {fileID: 1668816323}
   - component: {fileID: 1668816322}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2061,7 +2114,7 @@ GameObject:
   - component: {fileID: 1724378758}
   - component: {fileID: 1724378757}
   - component: {fileID: 1724378756}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall_N
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2172,7 +2225,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   players: []
-  npcs: []
+  npcs:
+  - {fileID: 774219689}
   playerControllerPrefab: {fileID: 1440455364525603281, guid: 05dc9cf94b4f7524ebbf22c0a45c2cbc,
     type: 3}
   tankPawnPrefab: {fileID: 7149510585297269770, guid: 0a1842d9ee8335a418cc0d4583bfeb64,
@@ -2218,7 +2272,7 @@ GameObject:
   - component: {fileID: 1765111746}
   - component: {fileID: 1765111745}
   - component: {fileID: 1765111744}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (15)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2307,7 +2361,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1904882242}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PlayerSpawnArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2356,7 +2410,7 @@ GameObject:
   - component: {fileID: 2091922942}
   - component: {fileID: 2091922941}
   - component: {fileID: 2091922940}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2448,7 +2502,7 @@ GameObject:
   - component: {fileID: 2122694258}
   - component: {fileID: 2122694257}
   - component: {fileID: 2122694256}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall_W
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2540,7 +2594,7 @@ GameObject:
   - component: {fileID: 2139179355}
   - component: {fileID: 2139179354}
   - component: {fileID: 2139179353}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wall (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
