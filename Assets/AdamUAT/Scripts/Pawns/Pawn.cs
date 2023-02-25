@@ -22,8 +22,10 @@ public abstract class Pawn : MonoBehaviour
         
     }
 
-    public abstract void MoveForward();
-    public abstract void MoveBackward();
+    public virtual void MoveForward() { }
+    public virtual void MoveBackward() { }
+    public virtual void MoveTo(Vector3 target) { }
+    public virtual void StopMoving() { }
     public abstract void RotateClockwise();
     public abstract void RotateCounterClockwise();
     public virtual void RotateTowards(Vector3 targetPosition)
