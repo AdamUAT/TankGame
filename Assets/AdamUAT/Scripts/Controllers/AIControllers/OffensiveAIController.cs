@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.GraphicsBuffer;
 
 public class OffensiveAIController : AIController
 {
     [SerializeField]
-    protected float WanderRadiusMax = 30; //How far away the next point on the map the tank will wander towards.
+    protected float wanderRadiusMax = 30; //How far away the next point on the map the tank will wander towards.
     [SerializeField]
-    protected float WanderRadiusMin = 15; //The minimum distance the tank will wander.
+    protected float wanderRadiusMin = 15; //The minimum distance the tank will wander.
+    [SerializeField]
+    protected float searchDelay = 5; //The delay between when the AI loses sight of the player and moves closer.
+    [SerializeField]
+    protected float followDistance = 5; //The distance in units the enemy will stay away from the player until moving closer.
 
     public override void Start()
     {
@@ -27,6 +32,7 @@ public class OffensiveAIController : AIController
             ChangeState(AIState.Idle);
         }
 
+        target = GameManager.instance.players[0].pawn.gameObject; //This enemy will only target the player.
     }
 
     // Update is called once per frame
@@ -44,10 +50,15 @@ public class OffensiveAIController : AIController
                 EndWanderState();
                 break;
             case AIState.Chase:
+                EndChaseState();
                 break;
             case AIState.Idle:
                 break;
             case AIState.Search:
+                EndSearchState();
+                break;
+            case AIState.Alert:
+                EndAlertState();
                 break;
             default:
                 Debug.LogWarning("Offensive Tank had its state go out of bounds.");
@@ -65,9 +76,14 @@ public class OffensiveAIController : AIController
                 StartWanderState();
                 break;
             case AIState.Chase:
+                StartChaseState();
                 break;
             case AIState.Search:
+                StartSearchState();
                 break;
+            case AIState.Alert:
+                StartAlertState();
+                break ;
             default:
                 Debug.LogWarning("Offensive Tank had its state go out of bounds.");
                 break;
@@ -88,8 +104,13 @@ public class OffensiveAIController : AIController
                 DoIdleState();
                 break;
             case AIState.Chase:
+                DoChaseState();
                 break;
             case AIState.Search:
+                DoSearchState();
+                break;
+            case AIState.Alert:
+                DoAlertState();
                 break;
             default:
                 Debug.LogWarning("Offensive Tank had its state go out of bounds.");
@@ -103,7 +124,6 @@ public class OffensiveAIController : AIController
     public override void CheckSenses()
     {
         //Checks if it can see the player.
-        target = GameManager.instance.players[0].pawn.gameObject;
         if(CanSee(target))
         {
             ChangeState(AIState.Chase);
@@ -112,7 +132,11 @@ public class OffensiveAIController : AIController
 
     public override void HeardPlayerShoot()
     {
-        ChangeState(AIState.Search);
+        //If the enemy is in the chase state, then it will ignore the player firing, because it knows where the player is and is most likely firing at it.
+        if (currentState != AIState.Chase)
+        {
+            ChangeState(AIState.Idle);
+        }
     }
 
     #region Wander
@@ -157,7 +181,7 @@ public class OffensiveAIController : AIController
         {
             //This will randomly select a spot. If it doens't find a spot within 10 tries, then it will turn to idle state.
             //In addition to randomizing direction, it also randomizes the distance.
-            float randomDistance = Random.Range(WanderRadiusMin, WanderRadiusMax);
+            float randomDistance = Random.Range(wanderRadiusMin, wanderRadiusMax);
             Vector3 randomDirection = Random.insideUnitCircle.normalized;
             randomDirection = new Vector3(randomDirection.x, 0, randomDirection.y); //This rearanges the vector3, as the randomization creates a vector 2, so it assignes the z-value to the y-value.
             Vector3 randomTarget = randomDirection * randomDistance + transform.position; //Makes the randomTarget vector have its origin at the player. 
@@ -198,6 +222,87 @@ public class OffensiveAIController : AIController
     #endregion Wander
 
     #region Combat
-    //public ov
+    protected void StartChaseState()
+    {
+
+    }
+    protected void DoChaseState()
+    {
+        if(CanSee(target))
+        {
+            lastStateChangeTime = Time.time; //Tells the timer when the last time the enemy saw the player was.
+            if(DistanceFromTarget() > followDistance)
+            {
+                //If the distance between the target and the enemy is too big, then the enemy will move towards the player.
+                Seek(target);
+            }
+            else
+            {
+                //Stops the enemy from getting too close to the player willingly.
+                if(pawn.IsMoving())
+                {
+                    pawn.StopMoving();
+                }
+
+                pawn.RotateTowards(target.transform.position, 180);
+
+                //If the tank is looking at the tank, then it will shoot the tank.
+                Vector3 aiToTarget = target.transform.position - transform.position;
+                float angleToTarget = Vector3.Angle(aiToTarget, pawn.transform.forward);
+                if (Mathf.Abs(angleToTarget) > 5)
+                {
+                    pawn.Shoot();
+                }
+            }
+        }
+        else if(Time.time >= lastStateChangeTime + searchDelay)
+        {
+            //Tells the AI to move to the player's last known location if it has gone searchDelay seconds without seeing the player.
+            ChangeState(AIState.Search);
+        }
+        else
+        {
+
+        }
+    }
+    protected void EndChaseState()
+    {
+
+    }
+    protected void StartSearchState()
+    {
+
+    }
+    protected void DoSearchState()
+    {
+        //Moves the enemy to the last known location of the player.
+        Seek(lastTargetLocation);
+
+        //This should make sure enough time has passed that the frames have calculated enough for IsMoving to actually return a real result.
+        if (Time.time >= lastStateChangeTime + 0.1)
+        {
+            //After the enemy arrived at the point, it looks around for the player. If it doesn't find it, then it starts to wander agian.
+            if (!pawn.IsMoving())
+            {
+                ChangeState(AIState.Idle);
+            }
+        }
+    }
+    protected void EndSearchState()
+    {
+
+    }
+    protected void StartAlertState() 
+    {
+
+    }
+    protected void DoAlertState() 
+    {
+        
+    }
+    protected void EndAlertState() 
+    {
+        
+    }
     #endregion Combat
 }

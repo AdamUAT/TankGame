@@ -18,6 +18,7 @@ public class TankPawn : Pawn
     private float fireRate;
     private float reloadCountdown;
     private bool canFire;
+
     private CameraController cameraController;
 
     // Start is called before the first frame update

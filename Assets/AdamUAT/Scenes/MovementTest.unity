@@ -1149,8 +1149,10 @@ MonoBehaviour:
   fieldOfView: 45
   eyesight: 15
   navMesh: {fileID: 440024280}
-  WanderRadiusMax: 30
-  WanderRadiusMin: 15
+  wanderRadiusMax: 30
+  wanderRadiusMin: 15
+  searchDelay: 5
+  followDistance: 5
 --- !u!114 &774219690 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5082153452566442783, guid: dccaa1d0f3491014c9e69babcf50811b,
@@ -1732,9 +1734,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -127359804011573524, guid: dccaa1d0f3491014c9e69babcf50811b,
+        type: 3}
+      propertyPath: firePointTransform
+      value: 
+      objectReference: {fileID: 1438392132}
     m_RemovedComponents:
     - {fileID: -1165210256313676452, guid: dccaa1d0f3491014c9e69babcf50811b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: dccaa1d0f3491014c9e69babcf50811b, type: 3}
+--- !u!4 &1438392132 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2001519237419235133, guid: dccaa1d0f3491014c9e69babcf50811b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1405754334}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1495442602
 GameObject:
   m_ObjectHideFlags: 0
