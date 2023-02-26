@@ -37,11 +37,12 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        SpawnPlayer(); //SpawnPlayer needs to be first thing so other scripts can access it.
     }
 
     void Start()
     {
-        SpawnPlayer();
     }
 
     // Update is called once per frame
@@ -57,9 +58,12 @@ public class GameManager : MonoBehaviour
         GameObject newPlayerObj = Instantiate(playerControllerPrefab, Vector3.zero, Quaternion.identity);
         GameObject newPawnObj = Instantiate(tankPawnPrefab, playerSpawnTransform.position, playerSpawnTransform.rotation);
 
-        Controller newController = newPlayerObj.GetComponent<Controller>();
+        PlayerController newController = newPlayerObj.GetComponent<PlayerController>();
         Pawn newPawn = newPawnObj.GetComponent<Pawn>();
 
         newController.pawn = newPawn;
+
+        //Add the spawned player to the variable so it can be accessed from anywhere.
+        players.Add(newController);
     }
 }

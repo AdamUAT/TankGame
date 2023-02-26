@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fd88bc17c5368f459c6fa2782179e69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  firePointTransform: {fileID: 0}
 --- !u!114 &-1165210256313676452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,6 +188,12 @@ MonoBehaviour:
   moveSpeed: 5
   turnSpeed: 90
   navMeshAgent: {fileID: 7010796475835690572}
+  fireDelay: 1
+  shellPrefab: {fileID: 8206576151963044968, guid: 747d5aa5d211f0b41bc4d4b590fd6f1a,
+    type: 3}
+  fireForce: 1000
+  damageDone: 15
+  shellLifespan: 1.5
 --- !u!1 &5384876760722516632
 GameObject:
   m_ObjectHideFlags: 0

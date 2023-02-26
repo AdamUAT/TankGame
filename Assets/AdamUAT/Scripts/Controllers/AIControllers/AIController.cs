@@ -5,11 +5,12 @@ using UnityEngine.AI;
 
 public class AIController : Controller
 {
-    public enum AIState { Idle, Guard, Chase, Flee, Patrol, Attack, Scan, BackToPost, Wander, Search}
+    public enum AIState { Idle, Guard, Chase, Flee, Patrol, Attack, Scan, BackToPost, Wander, Search, Alert}
     public AIState currentState;
     protected float lastStateChangeTime;
     public GameObject target; //This IS NOT equivilant to the player. This is any gameobject the AI is set to move to.
     protected Vector3 targetLocation; //This is similiar to target, but is a set location instead of a moving GameObject.
+    protected Vector3 lastTargetLocation; //If the AI loses sight of the target, it knows the last spot it saw the target.
 
     private bool sightCache; //This holds the past result of CanSee.
     private float sightCacheTimer; //A timer that controlls when CanSee will recaculate vs. return the previous calculation.
@@ -133,7 +134,7 @@ public class AIController : Controller
             // Find the angle between the direction our AI is facing (forward in local space) and the vector to the target.
             float angleToTarget = Vector3.Angle(aiToTarget, pawn.transform.forward);
             //Returns false if the player is outside the field of view.
-            if (angleToTarget > fieldOfView)
+            if (Mathf.Abs(angleToTarget) > fieldOfView)
             {
                 sightCache = false;
                 sightCacheTimer = Time.time;
@@ -161,6 +162,7 @@ public class AIController : Controller
                     {
                         sightCache = true;
                         sightCacheTimer = Time.time;
+                        lastTargetLocation = _target.transform.position; //Saves the position of the player
                         return true; //One of the raycasts did not hit a wall. That means the player is actively peeking around a corner. This prevents the player from aranging themselves to somehow shoot the enemy while the AI thinks there behind a wall.
                     }
                 }
@@ -169,12 +171,26 @@ public class AIController : Controller
                     //If it didn't hit a wall, then there must be line of sight for the player.
                     sightCache = true;
                     sightCacheTimer = Time.time;
+                    lastTargetLocation = _target.transform.position; //Saves the position of the player.
                     return true;
                 }
             }
         }
         else
             return (sightCache); //Returns the last check if this function was called in the past half second.
+    }
+
+    public float DistanceFromTarget()
+    {
+        return(Vector3.Distance(target.transform.position, transform.position));
+    }
+    public float DistanceFromTarget(Vector3 _target)
+    {
+        return(Vector3.Distance(_target, transform.position));
+    }
+    public float DistanceFromTarget(GameObject _target)
+    {
+        return(Vector3.Distance(_target.transform.position, transform.position));
     }
     #endregion Senses
 }
