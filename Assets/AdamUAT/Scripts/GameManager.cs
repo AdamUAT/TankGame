@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
 
         newController.pawn = newPawn;
 
-        //Add the spawned player to the variable so it can be accessed from anywhere.
+        //Add the spawned player to the variable so it can be accessed from anywhere. 
         players.Add(newController);
     }
 }
