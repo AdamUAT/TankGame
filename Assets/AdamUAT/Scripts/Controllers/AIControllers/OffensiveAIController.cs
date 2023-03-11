@@ -130,12 +130,16 @@ public class OffensiveAIController : AIController
         }
     }
 
-    public override void HeardPlayerShoot()
+    public override void HeardPlayerShoot(Vector3 playerPosition)
     {
-        //If the enemy is in the chase state, then it will ignore the player firing, because it knows where the player is and is most likely firing at it.
-        if (currentState != AIState.Chase)
+        //Checks if the enemy is close enough to the player to hear it.
+        if (Vector3.Distance(pawn.transform.position, playerPosition) <= hearingRange)
         {
-            ChangeState(AIState.Idle);
+            //If the enemy is in the chase state, then it will ignore the player firing, because it knows where the player is and is most likely firing at it.
+            if (currentState != AIState.Chase)
+            {
+                ChangeState(AIState.Idle);
+            }
         }
     }
 

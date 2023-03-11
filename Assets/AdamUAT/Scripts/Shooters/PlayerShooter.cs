@@ -2,11 +2,11 @@
 using UnityEditor;
 using UnityEngine;
 
-public class EnemyShooter : TankShooter
+public class PlayerShooter : TankShooter
 {
-    /// <summary>
-    /// Instantiates and applies force to a projectile.
-    /// </summary>
+   /// <summary>
+   /// Instantiates and applies force to a projectile. Also triggers all enemies to potentially hear the player.
+   /// </summary>
     protected override void LaunchBullet()
     {
         //Instantiate our Prefab
@@ -28,5 +28,12 @@ public class EnemyShooter : TankShooter
         }
 
         Destroy(newShell, shellLifespan);
+
+        //This returns all enemies in a 50 unit range.
+        foreach (AIController enemy in GameManager.instance.npcs)
+        {
+            //This component must be on the pawn of the player for this to work.
+            enemy.HeardPlayerShoot(gameObject.transform.position);
+        }
     }
 }

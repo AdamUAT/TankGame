@@ -17,8 +17,8 @@ public class AIController : Controller
     [SerializeField]
     private float sightCacheDelay = 0.5f; //The variable that controlls how often this AI checks for vision.
 
-    //hearingRange needs to be accessed by TankShooter.
-    public float hearingRange = 20.0f;
+    [SerializeField]
+    protected float hearingRange = 20.0f;
     [SerializeField]
     protected float fieldOfView = 45.0f; //The angle of half of the AI's field of view, in degrees.
     [SerializeField]
@@ -117,7 +117,7 @@ public class AIController : Controller
     /// <summary>
     /// Tells the AI controller the player fired a shot near them. 
     /// </summary>
-    public virtual void HeardPlayerShoot() //This is called in TankShooter whenever the player fires.
+    public virtual void HeardPlayerShoot(Vector3 playerPosition) //This is called in TankShooter whenever the player fires.
     {
 
     }

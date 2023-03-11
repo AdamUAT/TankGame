@@ -4,20 +4,10 @@ using UnityEngine;
 
 public class TankPawn : Pawn
 {
-    [SerializeField]
-    private GameObject shellPrefab;
-    [SerializeField]
-    private float fireForce;
-    [SerializeField]
-    private float damageDone;
-    [SerializeField]
-    private float shellLifespan;
+    
+    public TankShooter shooter;
 
-    private Shooter shooter;
-    [SerializeField]
-    private float fireRate;
-    private float reloadCountdown;
-    private bool canFire;
+
 
     private CameraController cameraController;
 
@@ -25,20 +15,13 @@ public class TankPawn : Pawn
     public override void Start()
     {
         base.Start();
-        shooter = GetComponent<Shooter>();
+        shooter = GetComponent<TankShooter>();
         cameraController = GetComponent<CameraController>();
     }
 
     // Update is called once per frame
     public override void Update()
     {
-        if (!canFire)
-        {
-            reloadCountdown -= Time.deltaTime;
-            if (reloadCountdown <= 0)
-                Reload();
-        }
-
         base.Update();
     }
 
@@ -81,25 +64,9 @@ public class TankPawn : Pawn
     }
     public override void Shoot()
     {
-        if (canFire)
-        {
-            canFire = false;
-            reloadCountdown = fireRate;
-
-            if (shooter != null)
-                shooter.Shoot(shellPrefab, fireForce, damageDone, shellLifespan);
-            else
-                Debug.LogWarning("Custom Warning: No Shooter in TankPawn.Shoot");
-        }
+        if (shooter != null)
+            shooter.Shoot();
         else
-        {
-            //Put stuff here that happens when the player tries to fire but can't, like a gun pin click sound effect.
-        }
-    }
-
-    private void Reload()
-    {
-        canFire = true;
-        //Put anything here that happens when the player can fire again, such as a sound effect.
+            Debug.LogWarning("Custom Warning: No Shooter in TankPawn.Shoot");
     }
 }

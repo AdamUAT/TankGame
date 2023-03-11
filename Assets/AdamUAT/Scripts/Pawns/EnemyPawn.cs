@@ -80,8 +80,8 @@ public class EnemyPawn : Pawn
         {
             lastShot = Time.time; //Updates the timer.
 
-            if (shooter != null)
-                shooter.Shoot(shellPrefab, fireForce, damageDone, shellLifespan);
+            if (shooter != null) { }
+            //shooter.Shoot(shellPrefab, fireForce, damageDone, shellLifespan);
             else
                 Debug.LogWarning("Custom Warning: No Shooter in EnemyPawn.Shoot");
         }
