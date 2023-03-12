@@ -22,7 +22,15 @@ public class TankMover : MonoBehaviour
     [SerializeField]
     protected float turnSpeed;
 
-    public void Start()
+    //PlayerMover controlls cameraController since TankPawn could also belong to enemies.
+    //Also, rotation changes how the camera looks so it makes since.
+    //Since PlayerMover is accessable from the pawn, CameraController is also accessible from the pawn, but it needs to be in the parent class TankMover.
+    [HideInInspector]
+    public CameraController cameraController;
+
+
+
+    protected virtual void Start()
     {
         cc = GetComponent<CharacterController>();
     }
@@ -72,13 +80,13 @@ public class TankMover : MonoBehaviour
     {
         if (clockwise)
         {
-            transform.Rotate(new Vector3(0, turnSpeed * Time.deltaTime, 0));
-            turret.transform.Rotate(new Vector3(0, -turnSpeed * Time.deltaTime, 0)); //Rotates the turret in the opposite direction so it doesn't change.
+            body.transform.Rotate(new Vector3(0, turnSpeed * Time.deltaTime, 0));
+            //turret.transform.Rotate(new Vector3(0, -turnSpeed * Time.deltaTime, 0)); //Rotates the turret in the opposite direction so it doesn't change.
         }
         else
         {
-            transform.Rotate(new Vector3(0, -turnSpeed * Time.deltaTime, 0));
-            turret.transform.Rotate(new Vector3(0, turnSpeed * Time.deltaTime, 0)); //Rotates the turret in the opposite direction so it doesn't change.
+            body.transform.Rotate(new Vector3(0, -turnSpeed * Time.deltaTime, 0));
+            //turret.transform.Rotate(new Vector3(0, turnSpeed * Time.deltaTime, 0)); //Rotates the turret in the opposite direction so it doesn't change.
         }
     }
 
@@ -111,9 +119,17 @@ public class TankMover : MonoBehaviour
     /// Rotates the turret to the degree specified.
     /// </summary>
     /// <param name="degree">The new rotation in, euler angles, the turret will have.</param>
-    public void TurretRotateTo(float degree)
+    public void TurretRotateTowards(float degree)
     {
         turret.transform.eulerAngles = new Vector3(0, degree, 0);
     }
 
+    /// <summary>
+    /// Adds rotation to the turret.
+    /// </summary>
+    /// <param name="amount">The amount of degrees per second the turret rotates. The sign tells direction.</param>
+    public void TurretRotate(float amount)
+    {
+        turret.transform.Rotate(new Vector3(0, amount * Time.deltaTime, 0));
+    }
 }

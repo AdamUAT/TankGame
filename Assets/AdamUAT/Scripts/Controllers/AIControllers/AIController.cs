@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class AIController : Controller
 {
+    /*
     public enum AIState { Idle, Guard, Chase, Flee, Patrol, Attack, Scan, BackToPost, Wander, Search, Alert}
     public AIState currentState;
     protected float lastStateChangeTime;
@@ -112,7 +113,7 @@ public class AIController : Controller
     #endregion Seek
 
     #endregion Behaviors
-
+    */
     #region Senses
     /// <summary>
     /// Tells the AI controller the player fired a shot near them. 
@@ -121,6 +122,7 @@ public class AIController : Controller
     {
 
     }
+    /*
     /// <summary>
     /// Checks to see if the AI controller is able to see its target.
     /// </summary>
@@ -192,5 +194,6 @@ public class AIController : Controller
     {
         return(Vector3.Distance(_target.transform.position, transform.position));
     }
+    */
     #endregion Senses
 }

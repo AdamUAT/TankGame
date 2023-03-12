@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
         GameObject newPawnObj = Instantiate(tankPawnPrefab, playerSpawnTransform.position, playerSpawnTransform.rotation);
 
         PlayerController newController = newPlayerObj.GetComponent<PlayerController>();
-        Pawn newPawn = newPawnObj.GetComponent<Pawn>();
+        TankPawn newPawn = newPawnObj.GetComponent<TankPawn>();
 
         newController.pawn = newPawn;
 

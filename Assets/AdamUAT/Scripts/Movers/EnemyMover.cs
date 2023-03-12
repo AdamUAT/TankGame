@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class EnemyMover : TankMover
+public class EnemyMover : TankMover
 {
     
 }

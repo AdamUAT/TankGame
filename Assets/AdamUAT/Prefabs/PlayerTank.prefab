@@ -23,12 +23,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 153086523651382141}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 14, z: -10}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -10, y: 12.449, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 7530957052241120460}
-  m_RootOrder: 2
+  m_Father: {fileID: 9123807961812726077}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1928448458825999481
 GameObject:
@@ -304,8 +304,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7530957052241120460}
   - component: {fileID: 6834225977138675412}
-  - component: {fileID: 6834225977138675409}
   - component: {fileID: -1158064965215916459}
+  - component: {fileID: -2854712923024799960}
   - component: {fileID: 6834225977138675410}
   - component: {fileID: 6834225977138675408}
   - component: {fileID: 6834225977138675413}
@@ -329,7 +329,6 @@ Transform:
   m_Children:
   - {fileID: 9123807961899517138}
   - {fileID: 9123807961812726077}
-  - {fileID: 1335048055187872101}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -346,24 +345,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shooter: {fileID: -1158064965215916459}
-  mover: {fileID: 6834225977138675409}
---- !u!114 &6834225977138675409
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6834225977138675423}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2f388cd1f9b9ba478cc2254fa810822, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cc: {fileID: 6834225977138675408}
-  body: {fileID: 9123807961899517137}
-  turret: {fileID: 9123807961812726076}
-  moveSpeed: 5
-  turnSpeed: 90
+  mover: {fileID: 0}
 --- !u!114 &-1158064965215916459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,6 +367,25 @@ MonoBehaviour:
   isDelayReload: 1
   fireRateDelay: 1
   fireRate: 1
+--- !u!114 &-2854712923024799960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6834225977138675423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 883eab090dbd8fa45876b310541d3945, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cc: {fileID: 6834225977138675408}
+  body: {fileID: 9123807961899517137}
+  turret: {fileID: 9123807961812726076}
+  moveSpeed: 5
+  turnSpeed: 90
+  cameraController: {fileID: 0}
+  lookSensitivity: 120
 --- !u!114 &6834225977138675410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -619,6 +620,7 @@ Transform:
   - {fileID: 6421497617078744678}
   - {fileID: 2655345951289049117}
   - {fileID: 5598319799409403490}
+  - {fileID: 1335048055187872101}
   m_Father: {fileID: 7530957052241120460}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}

@@ -8,7 +8,6 @@ public class TankPawn : Pawn
     public TankShooter shooter;
     [HideInInspector]
     public TankMover mover;
-    private CameraController cameraController;
 
 
     // Start is called before the first frame update
@@ -16,13 +15,6 @@ public class TankPawn : Pawn
     {
         shooter = GetComponent<TankShooter>();
         mover = GetComponent<TankMover>();
-        cameraController = GetComponent<CameraController>();
-    }
-
-    //This update is only for cameras, as it helps stop making things jittery.
-    public void LateUpdate()
-    {
-        cameraController.UpdateCameraPosition(); //Moves the camera smoothly towards where it should be.
     }
 
     public override void MoveForward()

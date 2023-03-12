@@ -10,18 +10,15 @@ public class PlayerController : Controller
     public KeyCode rotateCounterClockwiseKey;
     public KeyCode shootKey;
 
-    // Start is called before the first frame update
-    public void Start()
+    private void Start()
     {
-        // Run the Start() function from the parent (base) class
-        base.Start();
+        //Hides and locks the cursor.
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
-    // Update is called once per frame
-    public override void Update()
+    private void Update()
     {
-        base.Update();
-
         ProcessInputs();
     }
 
@@ -43,6 +40,7 @@ public class PlayerController : Controller
     {
         if(Input.GetKey(rotateClockwiseKey))
         {
+            if(pawn.mover)
             pawn.RotateClockwise();
         }
 
