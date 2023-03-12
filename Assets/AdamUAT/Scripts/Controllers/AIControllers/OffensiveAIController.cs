@@ -6,6 +6,7 @@ using static UnityEngine.GraphicsBuffer;
 
 public class OffensiveAIController : AIController
 {
+    
     [SerializeField]
     protected float wanderRadiusMax = 30; //How far away the next point on the map the tank will wander towards.
     [SerializeField]
@@ -15,7 +16,7 @@ public class OffensiveAIController : AIController
     [SerializeField]
     protected float followDistance = 5; //The distance in units the enemy will stay away from the player until moving closer.
 
-    public override void Start()
+    protected override void Start()
     {
         navMesh = NavMeshManager.instance.globalNavMesh; //Assign the navMesh to be the entire map.
 
@@ -35,8 +36,7 @@ public class OffensiveAIController : AIController
         target = GameManager.instance.players[0].pawn.gameObject; //This enemy will only target the player.
     }
 
-    // Update is called once per frame
-    public override void Update()
+    protected override void Update()
     {
         base.Update();
     }
@@ -130,12 +130,16 @@ public class OffensiveAIController : AIController
         }
     }
 
-    public override void HeardPlayerShoot()
+    public override void HeardPlayerShoot(Vector3 playerPosition)
     {
-        //If the enemy is in the chase state, then it will ignore the player firing, because it knows where the player is and is most likely firing at it.
-        if (currentState != AIState.Chase)
+        //Checks if the enemy is close enough to the player to hear it.
+        if (Vector3.Distance(pawn.transform.position, playerPosition) <= hearingRange)
         {
-            ChangeState(AIState.Idle);
+            //If the enemy is in the chase state, then it will ignore the player firing, because it knows where the player is and is most likely firing at it.
+            if (currentState != AIState.Chase)
+            {
+                ChangeState(AIState.Idle);
+            }
         }
     }
 
@@ -167,7 +171,7 @@ public class OffensiveAIController : AIController
     /// </summary>
     protected void EndWanderState()
     {
-        pawn.StopMoving();
+        pawn.mover.StopMoving();
     }
 
     /// <summary>
@@ -204,17 +208,21 @@ public class OffensiveAIController : AIController
     /// </summary>
     public override void DoIdleState()
     {
-        if(Time.time >= lastStateChangeTime + 7.0f)
+        if(Time.time >= lastStateChangeTime + 8.0f)
         {
             ChangeState(AIState.Wander);
         }
+        else if(Time.time <= lastStateChangeTime + 8.0f && Time.time >= lastStateChangeTime + 7.0f)
+        {
+            pawn.mover.TurretRotate(90); //Returns turret to front position.
+        }
         else if (Time.time <= lastStateChangeTime + 6.0f && Time.time >= lastStateChangeTime + 4.0f)
         {
-            pawn.RotateCounterClockwise();
+            pawn.mover.TurretRotate(-90);
         }
         else if (Time.time <= lastStateChangeTime + 2.0f && Time.time >= lastStateChangeTime + 1.0f)
         {
-            pawn.RotateClockwise();
+            pawn.mover.TurretRotate(90);
         }
     }
 
@@ -239,19 +247,19 @@ public class OffensiveAIController : AIController
             else
             {
                 //Stops the enemy from getting too close to the player willingly.
-                if(pawn.IsMoving())
+                if(pawn.mover.IsMoving())
                 {
-                    pawn.StopMoving();
+                    pawn.mover.StopMoving();
                 }
 
-                pawn.RotateTowards(target.transform.position, 180);
+                pawn.mover.RotateTowards(target.transform.position, 180);
 
                 //If the tank is looking at the tank, then it will shoot the tank.
                 Vector3 aiToTarget = target.transform.position - transform.position;
                 float angleToTarget = Vector3.Angle(aiToTarget, pawn.transform.forward);
                 if (Mathf.Abs(angleToTarget) > 5)
                 {
-                    pawn.Shoot();
+                    pawn.shooter.Shoot();
                 }
             }
         }
@@ -282,7 +290,7 @@ public class OffensiveAIController : AIController
         if (Time.time >= lastStateChangeTime + 0.1)
         {
             //After the enemy arrived at the point, it looks around for the player. If it doesn't find it, then it starts to wander agian.
-            if (!pawn.IsMoving())
+            if (!pawn.mover.IsMoving())
             {
                 ChangeState(AIState.Idle);
             }
@@ -305,4 +313,5 @@ public class OffensiveAIController : AIController
         
     }
     #endregion Combat
+    
 }

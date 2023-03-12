@@ -1,25 +1,154 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Compilation;
 using UnityEngine;
 
-public class TankMover : Mover
+public class TankMover : MonoBehaviour
 {
     //Makes the tank obey physics
-    private CharacterController cc;
+    [SerializeField]
+    protected CharacterController cc;
 
-    public override void Start()
+    //Used to determine the direction of movement
+    [SerializeField]
+    protected GameObject body;
+
+    //Used to determine where the tank is facing and how it will fire.
+    [SerializeField]
+    protected GameObject turret;
+
+    [SerializeField]
+    protected float moveSpeed;
+    [SerializeField]
+    protected float turnSpeed;
+
+    //PlayerMover controlls cameraController since TankPawn could also belong to enemies.
+    //Also, rotation changes how the camera looks so it makes since.
+    //Since PlayerMover is accessable from the pawn, CameraController is also accessible from the pawn, but it needs to be in the parent class TankMover.
+    [HideInInspector]
+    public CameraController cameraController;
+
+
+
+    protected virtual void Start()
     {
         cc = GetComponent<CharacterController>();
     }
 
-    public override void Move(Vector3 direction, float speed)
+    /// <summary>
+    /// Moves the tank either forward or backward.
+    /// </summary>
+    /// <param name="speed">Overrides how fast the tank should move. Sign tells direction.</param>
+    public void Move(float speed)
     {
         //Moving the player with a Character Controller component is much easier than the Rigidbody, because now we don't have to worry about physics.
-        cc.SimpleMove(direction * speed);
+        cc.SimpleMove(body.transform.forward * speed);
     }
 
-    public override void Rotate(float speed)
+    /// <summary>
+    /// Moves the tank either forward or backward.
+    /// </summary>
+    /// <param name="forward">Whether or not the tank should move forward or backward.</param>
+    public void Move(bool forward = true)
+    {
+        //Moving the player with a Character Controller component is much easier than the Rigidbody, because now we don't have to worry about physics.
+        if (forward)
+        {
+            cc.SimpleMove(body.transform.forward * moveSpeed);
+        }
+        else
+        {
+            cc.SimpleMove(body.transform.forward * -moveSpeed);
+        }
+    }
+
+    /// <summary>
+    /// Rotates just the body of the tank
+    /// </summary>
+    /// <param name="speed">How fast the tank rotates.</param>
+    public void BodyRotate(float speed)
     {
         transform.Rotate(new Vector3(0, speed * Time.deltaTime, 0));
+        turret.transform.Rotate(new Vector3(0, -speed * Time.deltaTime, 0)); //Rotates the turret in the opposite direction so it doesn't change.
     }
+
+    /// <summary>
+    /// Rotates just the body of the tank. Uses the speed provided by the TankMover component.
+    /// </summary>
+    ///<param name="clockwise">Whether the tank moves clockwise or anticlockwise.</param>
+    public void BodyRotate(bool clockwise)
+    {
+        if (clockwise)
+        {
+            body.transform.Rotate(new Vector3(0, turnSpeed * Time.deltaTime, 0));
+            //turret.transform.Rotate(new Vector3(0, -turnSpeed * Time.deltaTime, 0)); //Rotates the turret in the opposite direction so it doesn't change.
+        }
+        else
+        {
+            body.transform.Rotate(new Vector3(0, -turnSpeed * Time.deltaTime, 0));
+            //turret.transform.Rotate(new Vector3(0, turnSpeed * Time.deltaTime, 0)); //Rotates the turret in the opposite direction so it doesn't change.
+        }
+    }
+
+    /// <summary>
+    /// Rotates the tank towards a specific location, instead of a direction.
+    /// </summary>
+    /// <param name="targetPosition">The location the tank will rotate towards.</param>
+    public virtual void BodyRotateTowards(Vector3 targetPosition)
+    {
+        Vector3 vectorToTarget = targetPosition - transform.position;
+        Quaternion targetRotation = Quaternion.LookRotation(vectorToTarget, Vector3.up);
+
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
+    }
+
+    /// <summary>
+    /// Rotates the tank towards a specific location, instead of a direction.
+    /// </summary>
+    /// <param name="targetPosition">The location the tank will rotate towards.</param>
+    /// <param name="_turnSpeed">How fast the tank will rotate towards the target.</param>
+    public virtual void RotateTowards(Vector3 targetPosition, float _turnSpeed)
+    {
+        Vector3 vectorToTarget = targetPosition - transform.position;
+        Quaternion targetRotation = Quaternion.LookRotation(vectorToTarget, Vector3.up);
+
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _turnSpeed * Time.deltaTime);
+    }
+
+    /// <summary>
+    /// Rotates the turret to the degree specified.
+    /// </summary>
+    /// <param name="degree">The new rotation in, euler angles, the turret will have.</param>
+    public void TurretRotateTowards(float degree)
+    {
+        turret.transform.eulerAngles = new Vector3(0, degree, 0);
+    }
+
+    /// <summary>
+    /// Adds rotation to the turret.
+    /// </summary>
+    /// <param name="amount">The amount of degrees per second the turret rotates. The sign tells direction.</param>
+    public void TurretRotate(float amount)
+    {
+        turret.transform.Rotate(new Vector3(0, amount * Time.deltaTime, 0));
+    }
+
+    #region NavMesh-based movement virtual functions
+    /// <summary>
+    /// Tells the NavMeshAgent of this pawn to move to a location.
+    /// </summary>
+    /// <param name="target">The location to move to.</param>
+    public virtual void MoveTo(Vector3 target) { }
+
+    /// <summary>
+    /// Cancels the current path for the NavMeshAgent.
+    /// </summary>
+    public virtual void StopMoving() { }
+
+    /// <summary>
+    /// Determines if the NavMeshAgent is trying to move.
+    /// </summary>
+    /// <returns>True if the NavMeshAgent is moving.</returns>
+    public virtual bool IsMoving() { return false; }
+    #endregion NavMesh-based movement virtual functions
 }

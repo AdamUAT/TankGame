@@ -10,18 +10,15 @@ public class PlayerController : Controller
     public KeyCode rotateCounterClockwiseKey;
     public KeyCode shootKey;
 
-    // Start is called before the first frame update
-    public void Start()
+    private void Start()
     {
-        // Run the Start() function from the parent (base) class
-        base.Start();
+        //Hides and locks the cursor.
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
-    // Update is called once per frame
-    public override void Update()
+    private void Update()
     {
-        base.Update();
-
         ProcessInputs();
     }
 
@@ -41,29 +38,36 @@ public class PlayerController : Controller
     /// </summary>
     public void ProcessInputs()
     {
-        if(Input.GetKey(rotateClockwiseKey))
+        if (pawn.mover != null)
         {
-            pawn.RotateClockwise();
-        }
+            if (Input.GetKey(rotateClockwiseKey))
+            {
+                pawn.mover.BodyRotate(true);
+            }
 
-        if(Input.GetKey(rotateCounterClockwiseKey))
-        {
-            pawn.RotateCounterClockwise();
-        }
+            if (Input.GetKey(rotateCounterClockwiseKey))
+            {
+                pawn.mover.BodyRotate(false);
+            }
 
-        if(Input.GetKeyDown(shootKey))
-        {
-            pawn.Shoot();
-        }
+            if (Input.GetKeyDown(shootKey))
+            {
+                pawn.shooter.Shoot();
+            }
 
-        if (Input.GetKey(moveForwardKey))
-        {
-            pawn.MoveForward();
-        }
+            if (Input.GetKey(moveForwardKey))
+            {
+                pawn.mover.Move(true); ;
+            }
 
-        if (Input.GetKey(moveBackwardKey))
+            if (Input.GetKey(moveBackwardKey))
+            {
+                pawn.mover.Move(false);
+            }
+        }
+        else
         {
-            pawn.MoveBackward();
+            Debug.LogWarning("Custom Warning: No Mover component found in TankPawn");
         }
     }
 }

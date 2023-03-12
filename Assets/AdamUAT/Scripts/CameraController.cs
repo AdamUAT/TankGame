@@ -17,7 +17,16 @@ public class CameraController : MonoBehaviour
         camera = Instantiate(cameraPrefab, cameraPosition.transform.position, cameraPosition.transform.rotation); //Innitial spawn of the camera.
     }
 
-    public void UpdateCameraPosition()
+    //This update is only for cameras, as it helps stop making things jittery.
+    private void LateUpdate()
+    {
+        UpdateCameraPosition();
+    }
+
+    /// <summary>
+    /// Moves the camera smoothly to the cameraPosition GameObject.
+    /// </summary>
+    private void UpdateCameraPosition()
     {
         if (camera != null)
         {
