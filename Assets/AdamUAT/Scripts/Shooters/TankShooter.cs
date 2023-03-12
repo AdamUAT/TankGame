@@ -25,7 +25,7 @@ public class TankShooter : Shooter
     private float fireRate = 1;
 
     private float reloadCountdown;
-    private bool canFire;
+    protected bool canFire;
 
     private void Update()
     {

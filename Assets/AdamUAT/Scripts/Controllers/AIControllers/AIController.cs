@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class AIController : Controller
 {
-    /*
+    
     public enum AIState { Idle, Guard, Chase, Flee, Patrol, Attack, Scan, BackToPost, Wander, Search, Alert}
     public AIState currentState;
     protected float lastStateChangeTime;
@@ -28,20 +28,19 @@ public class AIController : Controller
     [SerializeField]
     protected NavMeshSurface navMesh; //A reference to the NavMesh this AI uses.
 
-    public override void Start()
+    protected virtual void Start()
     {
         currentState = AIState.Idle;
 
-        base.Start();
+        //This is in the AIController class instead of Controller class because the player's controller is spawned on a different GameObject than the player at runtime.
+        pawn = GetComponent<TankPawn>();
+        GameManager.instance.npcs.Add(this);
     }
 
-    // Update is called once per frame
-    public override void Update()
+    protected virtual void Update()
     {
         CheckSenses();
         MakeDecisions();
-
-        base.Update();
     }
 
     public virtual void MakeDecisions()
@@ -83,37 +82,37 @@ public class AIController : Controller
     {
         //The pawn rotates in the direction it's moving.
         this.target = target;
-        pawn.MoveTo(target.transform.position);
+        pawn.mover.MoveTo(target.transform.position);
     }
 
     public void Seek(Transform targetTransform)
     {
         //The pawn rotates in the direction it's moving.
         target = targetTransform.gameObject;
-        pawn.MoveTo(targetTransform.position);
+        pawn.mover.MoveTo(targetTransform.position);
     }
 
     public void Seek(Pawn targetPawn)
     {
         //The pawn rotates in the direction it's moving.
         target = targetPawn.gameObject;
-        pawn.MoveTo(targetPawn.gameObject.transform.position);
+        pawn.mover.MoveTo(targetPawn.gameObject.transform.position);
     }
 
     /// <summary>
     /// Unlike the other overloaded Seek functions, this one sets the target to be a fixed point instead of a GameObject.
     /// </summary>
-    /// <param name="targetLocation"></param>
-    public void Seek(Vector3 targetLocation)
+    /// <param name="targetLocation">The position the pawn will move to.</param>
+    public void Seek(Vector3 _targetLocation)
     {
         //The pawn rotates in the direction it's moving.
-        this.targetLocation = targetLocation;
-        pawn.MoveTo(targetLocation);
+        targetLocation = _targetLocation;
+        pawn.mover.MoveTo(targetLocation);
     }
     #endregion Seek
 
     #endregion Behaviors
-    */
+    
     #region Senses
     /// <summary>
     /// Tells the AI controller the player fired a shot near them. 
@@ -122,7 +121,7 @@ public class AIController : Controller
     {
 
     }
-    /*
+    
     /// <summary>
     /// Checks to see if the AI controller is able to see its target.
     /// </summary>
@@ -194,6 +193,6 @@ public class AIController : Controller
     {
         return(Vector3.Distance(_target.transform.position, transform.position));
     }
-    */
+    
     #endregion Senses
 }

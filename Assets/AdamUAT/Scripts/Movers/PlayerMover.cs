@@ -6,7 +6,7 @@ public class PlayerMover : TankMover
 {
     [SerializeField]
     [Tooltip("How fast the tank's turret and camera will rotate compared to the mouse's movements.")]
-    private float lookSensitivity;
+    private float lookSensitivity = 1;
 
     protected override void Start()
     {

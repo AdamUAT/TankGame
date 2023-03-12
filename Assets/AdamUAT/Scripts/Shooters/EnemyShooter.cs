@@ -29,4 +29,9 @@ public class EnemyShooter : TankShooter
 
         Destroy(newShell, shellLifespan);
     }
+
+    public void ForceReload()
+    {
+        canFire = true;
+    }
 }

@@ -132,4 +132,23 @@ public class TankMover : MonoBehaviour
     {
         turret.transform.Rotate(new Vector3(0, amount * Time.deltaTime, 0));
     }
+
+    #region NavMesh-based movement virtual functions
+    /// <summary>
+    /// Tells the NavMeshAgent of this pawn to move to a location.
+    /// </summary>
+    /// <param name="target">The location to move to.</param>
+    public virtual void MoveTo(Vector3 target) { }
+
+    /// <summary>
+    /// Cancels the current path for the NavMeshAgent.
+    /// </summary>
+    public virtual void StopMoving() { }
+
+    /// <summary>
+    /// Determines if the NavMeshAgent is trying to move.
+    /// </summary>
+    /// <returns>True if the NavMeshAgent is moving.</returns>
+    public virtual bool IsMoving() { return false; }
+    #endregion NavMesh-based movement virtual functions
 }

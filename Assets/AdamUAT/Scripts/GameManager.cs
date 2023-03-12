@@ -21,9 +21,12 @@ public class GameManager : MonoBehaviour
     //All pawns can be derived from the controllers.
 
     //Prefabs
-    public GameObject playerControllerPrefab;
-    public GameObject tankPawnPrefab;
-    public Transform playerSpawnTransform;
+    [SerializeField]
+    private GameObject playerControllerPrefab;
+    [SerializeField]
+    private GameObject tankPawnPrefab;
+    [SerializeField]
+    private Transform playerSpawnTransform;
     #endregion
 
     void Awake()
@@ -41,15 +44,6 @@ public class GameManager : MonoBehaviour
         SpawnPlayer(); //SpawnPlayer needs to be first thing so other scripts can access it.
     }
 
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     /// <summary>
     /// The function to spawn the player and link the pawn to the controller.
     /// </summary>
