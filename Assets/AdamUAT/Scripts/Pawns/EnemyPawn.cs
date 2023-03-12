@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyPawn : Pawn
+public class EnemyPawn : MonoBehaviour
 {
+    /*
     [SerializeField]
     protected NavMeshAgent navMeshAgent; //A reference to the navMeshAgent of the tank.
 
@@ -86,4 +87,5 @@ public class EnemyPawn : Pawn
                 Debug.LogWarning("Custom Warning: No Shooter in EnemyPawn.Shoot");
         }
     }
+    */
 }

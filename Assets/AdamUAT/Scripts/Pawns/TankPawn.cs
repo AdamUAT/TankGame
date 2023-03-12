@@ -4,25 +4,19 @@ using UnityEngine;
 
 public class TankPawn : Pawn
 {
-    
+    [HideInInspector]
     public TankShooter shooter;
-
-
-
+    [HideInInspector]
+    public TankMover mover;
     private CameraController cameraController;
 
-    // Start is called before the first frame update
-    public override void Start()
-    {
-        base.Start();
-        shooter = GetComponent<TankShooter>();
-        cameraController = GetComponent<CameraController>();
-    }
 
-    // Update is called once per frame
-    public override void Update()
+    // Start is called before the first frame update
+    private void Start()
     {
-        base.Update();
+        shooter = GetComponent<TankShooter>();
+        mover = GetComponent<TankMover>();
+        cameraController = GetComponent<CameraController>();
     }
 
     //This update is only for cameras, as it helps stop making things jittery.
@@ -34,7 +28,7 @@ public class TankPawn : Pawn
     public override void MoveForward()
     {
         if (mover != null)
-            mover.Move(transform.forward, moveSpeed);
+            mover.Move(true);
         else
             Debug.LogWarning("Custom Warning: No Mover in TankPawn.MoveForward()");
     }
@@ -42,7 +36,7 @@ public class TankPawn : Pawn
     public override void MoveBackward()
     {
         if (mover != null)
-            mover.Move(transform.forward, -moveSpeed);
+            mover.Move(false);
         else
             Debug.LogWarning("Custom Warning: No Mover in TankPawn.MoveBackward()");
     }
@@ -50,7 +44,7 @@ public class TankPawn : Pawn
     public override void RotateClockwise()
     {
         if (mover != null)
-            mover.Rotate(turnSpeed);
+            mover.BodyRotate(true);
         else
             Debug.LogWarning("Custom Warning: No Mover in TankPawn.RotateClockwise()");
     }
@@ -58,7 +52,7 @@ public class TankPawn : Pawn
     public override void RotateCounterClockwise()
     {
         if (mover != null)
-            mover.Rotate(-turnSpeed);
+            mover.BodyRotate(false);
         else
             Debug.LogWarning("Custom Warning: No Mover in TankPawn.RotateCounterClockwise()");
     }

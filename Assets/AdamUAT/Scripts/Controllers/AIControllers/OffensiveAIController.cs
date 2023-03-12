@@ -6,6 +6,7 @@ using static UnityEngine.GraphicsBuffer;
 
 public class OffensiveAIController : AIController
 {
+    /*
     [SerializeField]
     protected float wanderRadiusMax = 30; //How far away the next point on the map the tank will wander towards.
     [SerializeField]
@@ -309,4 +310,5 @@ public class OffensiveAIController : AIController
         
     }
     #endregion Combat
+    */
 }
