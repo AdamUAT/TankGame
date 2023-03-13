@@ -10,12 +10,10 @@ public class TankMover : MonoBehaviour
     protected CharacterController cc;
 
     //Used to determine the direction of movement
-    [SerializeField]
-    protected GameObject body;
+    public GameObject body;
 
     //Used to determine where the tank is facing and how it will fire.
-    [SerializeField]
-    protected GameObject turret;
+    public GameObject turret;
 
     [SerializeField]
     protected float moveSpeed;
@@ -119,9 +117,31 @@ public class TankMover : MonoBehaviour
     /// Rotates the turret to the degree specified.
     /// </summary>
     /// <param name="degree">The new rotation in, euler angles, the turret will have.</param>
-    public void TurretRotateTowards(float degree)
+    public void TurretInstantRotate(float degree)
     {
         turret.transform.eulerAngles = new Vector3(0, degree, 0);
+    }
+
+    /// <summary>
+    /// Rotates the turret so it is facing a certain position.
+    /// </summary>
+    /// <param name="target">The position the turret will be looking at.</param>
+    public void TurretRotateTowards(Vector3 target)
+    {
+        turret.transform.LookAt(target);
+        //Prevents the turret from angleing down.
+        turret.transform.eulerAngles = new Vector3(0, turret.transform.eulerAngles.y, 0);
+    }
+
+    /// <summary>
+    /// Rotates the turret so it is facing a certain GameObject.
+    /// </summary>
+    /// <param name="target">The GameObject the turret will be looking at.</param>
+    public void TurretRotateTowards(GameObject target)
+    {
+        turret.transform.LookAt(target.transform.position);
+        //Prevents the turret from angleing down.
+        turret.transform.eulerAngles = new Vector3(0, turret.transform.eulerAngles.y, 0);
     }
 
     /// <summary>

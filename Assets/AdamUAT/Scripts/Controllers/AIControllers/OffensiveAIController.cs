@@ -20,7 +20,7 @@ public class OffensiveAIController : AIController
     {
         navMesh = NavMeshManager.instance.globalNavMesh; //Assign the navMesh to be the entire map.
 
-        //This must be called before any state changes, because it initializes the state to Idle in case something goes wrong.
+        //This must be called before any state changes, because it initializes the state to Scan in case something goes wrong.
         base.Start();
 
         //Initializes the timer and starts the tank moving at the beginning.
@@ -30,7 +30,7 @@ public class OffensiveAIController : AIController
         }
         else
         {
-            ChangeState(AIState.Idle);
+            ChangeState(AIState.Scan);
         }
 
         target = GameManager.instance.players[0].pawn.gameObject; //This enemy will only target the player.
@@ -52,13 +52,16 @@ public class OffensiveAIController : AIController
             case AIState.Chase:
                 EndChaseState();
                 break;
-            case AIState.Idle:
+            case AIState.Scan:
                 break;
             case AIState.Search:
                 EndSearchState();
                 break;
             case AIState.Alert:
                 EndAlertState();
+                break;
+            case AIState.Idle:
+                //Do nothing, since Idle is a placeholder state.
                 break;
             default:
                 Debug.LogWarning("Offensive Tank had its state go out of bounds.");
@@ -70,7 +73,7 @@ public class OffensiveAIController : AIController
         //Calls the begin states.
         switch(newState)
         {
-            case AIState.Idle:
+            case AIState.Scan:
                 break;
             case AIState.Wander:
                 StartWanderState();
@@ -100,8 +103,8 @@ public class OffensiveAIController : AIController
             case AIState.Wander:
                 DoWanderState();
                 break;
-            case AIState.Idle:
-                DoIdleState();
+            case AIState.Scan:
+                DoScanState();
                 break;
             case AIState.Chase:
                 DoChaseState();
@@ -118,18 +121,6 @@ public class OffensiveAIController : AIController
         }
     }
 
-    /// <summary>
-    /// Sees if it should switch states based on the player.
-    /// </summary>
-    public override void CheckSenses()
-    {
-        //Checks if it can see the player.
-        if(CanSee(target))
-        {
-            ChangeState(AIState.Chase);
-        }
-    }
-
     public override void HeardPlayerShoot(Vector3 playerPosition)
     {
         //Checks if the enemy is close enough to the player to hear it.
@@ -138,21 +129,27 @@ public class OffensiveAIController : AIController
             //If the enemy is in the chase state, then it will ignore the player firing, because it knows where the player is and is most likely firing at it.
             if (currentState != AIState.Chase)
             {
-                ChangeState(AIState.Idle);
+                ChangeState(AIState.Scan);
             }
         }
     }
 
     #region Wander
     /// <summary>
-    /// If the enemy has reached the point it was wandering to, change state to Idle.
+    /// If the enemy has reached the point it was wandering to, change state to Scan.
     /// </summary>
     protected void DoWanderState()
     {
         //The check takes into consider floating-point errors by checking if the distance is less-than.
         if (Vector3.Distance(targetLocation, transform.position) <= 0.1)
         {
-            ChangeState(AIState.Idle); //When the enemy reaches its wandering target, it will idle for a few seconds.
+            ChangeState(AIState.Scan); //When the enemy reaches its wandering target, it will idle for a few seconds.
+        }
+
+        //Checks to see if the AI can see the player
+        if(CanSee(target))
+        {
+            ChangeState(AIState.Chase);
         }
     }
     /// <summary>
@@ -162,7 +159,7 @@ public class OffensiveAIController : AIController
     {
         if (!FindWanderTarget(10)) //If it failed to find a target in 10 tries, go back to idling.
         {
-            ChangeState(AIState.Idle);
+            ChangeState(AIState.Scan);
         }
     }
 
@@ -206,7 +203,7 @@ public class OffensiveAIController : AIController
     /// <summary>
     /// The enemy pauses and checks left and right for the player, then starts to wander again.
     /// </summary>
-    public override void DoIdleState()
+    public void DoScanState()
     {
         if(Time.time >= lastStateChangeTime + 8.0f)
         {
@@ -223,6 +220,11 @@ public class OffensiveAIController : AIController
         else if (Time.time <= lastStateChangeTime + 2.0f && Time.time >= lastStateChangeTime + 1.0f)
         {
             pawn.mover.TurretRotate(90);
+        }
+
+        if(CanSee(target))
+        {
+            ChangeState(AIState.Chase);
         }
     }
 
@@ -252,7 +254,7 @@ public class OffensiveAIController : AIController
                     pawn.mover.StopMoving();
                 }
 
-                pawn.mover.RotateTowards(target.transform.position, 180);
+                pawn.mover.TurretRotateTowards(target);
 
                 //If the tank is looking at the tank, then it will shoot the tank.
                 Vector3 aiToTarget = target.transform.position - transform.position;
@@ -292,7 +294,7 @@ public class OffensiveAIController : AIController
             //After the enemy arrived at the point, it looks around for the player. If it doesn't find it, then it starts to wander agian.
             if (!pawn.mover.IsMoving())
             {
-                ChangeState(AIState.Idle);
+                ChangeState(AIState.Scan);
             }
         }
     }

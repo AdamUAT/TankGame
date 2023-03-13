@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1335048055187872101}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: CameraPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 2655345951289049117}
   - component: {fileID: 1363485319266584651}
   - component: {fileID: 3987445826954728168}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: TurretBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 6712834409223782446}
   - component: {fileID: 2763422971039041736}
   - component: {fileID: 671444897664721064}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Opening
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -195,7 +195,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5598319799409403490}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -227,7 +227,7 @@ GameObject:
   - component: {fileID: 6421497617078744678}
   - component: {fileID: 1731028741261467321}
   - component: {fileID: 5151019954234749674}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -309,9 +309,9 @@ GameObject:
   - component: {fileID: 6834225977138675410}
   - component: {fileID: 6834225977138675408}
   - component: {fileID: 6834225977138675413}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: PlayerTank
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -344,8 +344,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1ce1ebed33f5824a83a86f931d26f12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shooter: {fileID: -1158064965215916459}
   mover: {fileID: 0}
+  shooter: {fileID: -1158064965215916459}
 --- !u!114 &-1158064965215916459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -431,7 +431,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3, y: 1.9462018, z: 2.2}
+  m_Size: {x: 2.2, y: 1.9462018, z: 3}
   m_Center: {x: 0, y: 1.0268991, z: 0}
 --- !u!1 &7694033595629481558
 GameObject:
@@ -444,7 +444,7 @@ GameObject:
   - component: {fileID: 6963910952948714095}
   - component: {fileID: 3610185360596773780}
   - component: {fileID: 964149281056152872}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -522,7 +522,7 @@ GameObject:
   - component: {fileID: 2194349891507666727}
   - component: {fileID: 7924055419589227444}
   - component: {fileID: 9197043625371486638}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Tracks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -598,7 +598,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9123807961812726077}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -633,7 +633,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9123807961899517138}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
