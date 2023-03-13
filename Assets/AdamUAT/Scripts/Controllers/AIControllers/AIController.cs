@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,6 +8,8 @@ public class AIController : Controller
 {
     
     public enum AIState { Idle, Guard, Chase, Flee, Patrol, Attack, Scan, BackToPost, Wander, Search, Alert}
+
+
     public AIState currentState;
     protected float lastStateChangeTime;
     public GameObject target; //This IS NOT equivilant to the player. This is any gameobject the AI is set to move to.
@@ -21,12 +24,18 @@ public class AIController : Controller
     [SerializeField]
     protected float hearingRange = 20.0f;
     [SerializeField]
-    protected float fieldOfView = 45.0f; //The angle of half of the AI's field of view, in degrees.
+    protected float bodyFieldOfView = 45.0f; //The angle of half of the AI's field of view, in degrees. The FOV is centered on the front face of the body.
+    [SerializeField]
+    protected float turretFieldOfView = 60.0f; //The angle of half of the AI's field of view, in degrees. The FOV is centered on the forward of the turret.
     [SerializeField]
     protected float eyesight = 15f; //The range the tanks are able to see the player.
 
     [SerializeField]
     protected NavMeshSurface navMesh; //A reference to the NavMesh this AI uses.
+
+    [SerializeField]
+    [Tooltip("Begins showing debug gizmos for the AI")]
+    protected bool debugMode = false;
 
     protected virtual void Start()
     {
@@ -39,16 +48,10 @@ public class AIController : Controller
 
     protected virtual void Update()
     {
-        CheckSenses();
         MakeDecisions();
     }
 
     public virtual void MakeDecisions()
-    {
-
-    }
-
-    public virtual void CheckSenses()
     {
 
     }
@@ -65,6 +68,7 @@ public class AIController : Controller
         lastStateChangeTime = Time.time;
     }
     #region States
+    /*
     public void DoSeekState()
     {
 
@@ -73,7 +77,8 @@ public class AIController : Controller
     public virtual void DoIdleState()
     { 
         
-    }
+    }*/
+
     #endregion States
 
     #region Behaviors
@@ -134,8 +139,44 @@ public class AIController : Controller
             Vector3 aiToTarget = _target.transform.position - transform.position;
             // Find the angle between the direction our AI is facing (forward in local space) and the vector to the target.
             float angleToTarget = Vector3.Angle(aiToTarget, pawn.transform.forward);
+
+            if (debugMode)
+            {
+                for (int i = 0; i < 20; i++)
+                {
+                    Debug.DrawLine(
+                        new Vector3(
+                            3 * Mathf.Sin((bodyFieldOfView * (i - 10) / 10 + pawn.mover.body.transform.eulerAngles.y) * Mathf.PI / 180) + pawn.mover.body.transform.position.x,
+                            0.5f,
+                            3 * Mathf.Cos((bodyFieldOfView * (i - 10) / 10 + pawn.mover.body.transform.eulerAngles.y) * Mathf.PI / 180) + pawn.mover.body.transform.position.z),
+                        new Vector3(
+                            3 * Mathf.Sin((bodyFieldOfView * (i - 9) / 10 + pawn.mover.body.transform.eulerAngles.y) * Mathf.PI / 180) + pawn.mover.body.transform.position.x,
+                            0.5f,
+                            3 * Mathf.Cos((bodyFieldOfView * (i - 9) / 10 + pawn.mover.body.transform.eulerAngles.y) * Mathf.PI / 180) + pawn.mover.body.transform.position.z),
+                        Color.red, 0.5f);
+                    Debug.DrawLine(
+                        new Vector3(
+                            4 * Mathf.Sin((turretFieldOfView * (i - 10) / 10 + pawn.mover.turret.transform.eulerAngles.y) * Mathf.PI / 180) + pawn.mover.turret.transform.position.x,
+                            0.5f,
+                            4 * Mathf.Cos((turretFieldOfView * (i - 10) / 10 + pawn.mover.turret.transform.eulerAngles.y) * Mathf.PI / 180) + pawn.mover.turret.transform.position.z),
+                        new Vector3(
+                            4 * Mathf.Sin((turretFieldOfView * (i - 9) / 10 + pawn.mover.turret.transform.eulerAngles.y) * Mathf.PI / 180) + pawn.mover.turret.transform.position.x,
+                            0.5f,
+                            4 * Mathf.Cos((turretFieldOfView * (i - 9) / 10 + pawn.mover.turret.transform.eulerAngles.y) * Mathf.PI / 180) + pawn.mover.turret.transform.position.z),
+                        Color.red, 0.5f);
+                }
+
+                RaycastHit hit;
+                Physics.Raycast(transform.position, aiToTarget, out hit);
+                Debug.DrawLine(transform.position, transform.position + (aiToTarget.normalized * hit.distance), Color.red, 0.5f);
+            }
+
             //Returns false if the player is outside the field of view.
-            if (Mathf.Abs(angleToTarget) > fieldOfView)
+            if (
+                (angleToTarget > pawn.mover.body.transform.rotation.y + bodyFieldOfView || 
+                angleToTarget < pawn.mover.body.transform.rotation.y - bodyFieldOfView) &&
+                (angleToTarget > pawn.mover.turret.transform.position.y + turretFieldOfView || 
+                angleToTarget < pawn.mover.turret.transform.position.y - turretFieldOfView))
             {
                 sightCache = false;
                 sightCacheTimer = Time.time;
@@ -143,37 +184,39 @@ public class AIController : Controller
             }
             else
             {
-                //This creates a layer mask that will only collide against Walls (layer 11).
-                int layerMask = 1 << 11; //Add layer 11 to the mask
+                //This creates a layer mask that will only collide against the Player (layer 12).
+                int layerMask = 1 << 12; //Add layer 12 to the mask
 
-                //Returns true if the raycast hits a wall.
+                //Returns true if the raycast hits a player.
                 if (Physics.Raycast(transform.position, aiToTarget, eyesight, layerMask))
-                {
-                    Vector3 perpendicular = new Vector3(-1, aiToTarget.y, aiToTarget.x / aiToTarget.z); //This gets the perpendicular vector to the line between the AI and the player.
-
-                    //Adds the perpendicular of the line with a magnitude equal to the radius of the enemy to the line between the player and the AI. this makes it so the line is from the AI to the left and right sides of the player that the AI is facing.
-                    //Although the collider is a square, this math acts like its a sphere. This works since the actual collider is larger.
-                    if (Physics.Raycast(transform.position, aiToTarget + perpendicular.normalized * 1.1f, eyesight, layerMask) && Physics.Raycast(transform.position, aiToTarget + perpendicular.normalized * -1.1f, eyesight, layerMask))
-                    {
-                        sightCache = false;
-                        sightCacheTimer = Time.time;
-                        return false; //The raycast hit a wall.
-                    }
-                    else
-                    {
-                        sightCache = true;
-                        sightCacheTimer = Time.time;
-                        lastTargetLocation = _target.transform.position; //Saves the position of the player
-                        return true; //One of the raycasts did not hit a wall. That means the player is actively peeking around a corner. This prevents the player from aranging themselves to somehow shoot the enemy while the AI thinks there behind a wall.
-                    }
-                }
-                else
                 {
                     //If it didn't hit a wall, then there must be line of sight for the player.
                     sightCache = true;
                     sightCacheTimer = Time.time;
                     lastTargetLocation = _target.transform.position; //Saves the position of the player.
+                    Debug.LogError("Tank saw the player");
                     return true;
+                }
+                else
+                {
+                    Vector3 perpendicular = new Vector3(-1, aiToTarget.y, aiToTarget.x / aiToTarget.z); //This gets the perpendicular vector to the line between the AI and the player.
+
+                    //Adds the perpendicular of the line with a magnitude equal to the radius of the enemy to the line between the player and the AI. this makes it so the line is from the AI to the left and right sides of the player that the AI is facing.
+                    //Although the collider is a square, this math acts like its a sphere. This works since the actual collider is larger.
+                    if (Physics.Raycast(transform.position, aiToTarget + perpendicular.normalized * 1.1f, eyesight, layerMask) || Physics.Raycast(transform.position, aiToTarget + perpendicular.normalized * -1.1f, eyesight, layerMask))
+                    {
+                        sightCache = true;
+                        sightCacheTimer = Time.time;
+                        lastTargetLocation = _target.transform.position; //Saves the position of the player
+                        Debug.LogError("Tank saw the player");
+                        return true; //One of the raycasts hit the player. That means the player is actively peeking around a corner. This prevents the player from aranging themselves to somehow shoot the enemy while the AI thinks there behind a wall.
+                    }
+                    else
+                    {
+                        sightCache = false;
+                        sightCacheTimer = Time.time;
+                        return false; //The raycast did not hit the player.
+                    }
                 }
             }
         }
