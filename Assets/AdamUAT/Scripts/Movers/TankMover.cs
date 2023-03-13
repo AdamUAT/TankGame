@@ -153,6 +153,16 @@ public class TankMover : MonoBehaviour
         turret.transform.Rotate(new Vector3(0, amount * Time.deltaTime, 0));
     }
 
+    /// <summary>
+    /// Angles the turret in degrees relative to the body.
+    /// </summary>
+    /// <param name="eulerAngle">The angle, in degrees, the turret should be rotated towards. 0 is the direction of the body, and it goes clockwise.</param>
+    /// <param name="turretRotationSpeed">The speed at which it rotates towards the target rotation.</param>
+    public void TurretRotateAngle(float eulerAngle, float turretRotationSpeed)
+    {
+        turret.transform.rotation = Quaternion.RotateTowards(turret.transform.rotation, Quaternion.Euler(0, eulerAngle + body.transform.eulerAngles.y, 0), turretRotationSpeed * Time.deltaTime);
+    }
+
     #region NavMesh-based movement virtual functions
     /// <summary>
     /// Tells the NavMeshAgent of this pawn to move to a location.

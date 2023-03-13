@@ -19,7 +19,7 @@ public class AIController : Controller
     private bool sightCache; //This holds the past result of CanSee.
     private float sightCacheTimer; //A timer that controlls when CanSee will recaculate vs. return the previous calculation.
     [SerializeField]
-    private float sightCacheDelay = 0.5f; //The variable that controlls how often this AI checks for vision.
+    private float sightCacheDelay = 0.25f; //The variable that controlls how often this AI checks for vision.
 
     [SerializeField]
     protected float hearingRange = 20.0f;
@@ -153,7 +153,7 @@ public class AIController : Controller
                             3 * Mathf.Sin((bodyFieldOfView * (i - 9) / 10 + pawn.mover.body.transform.eulerAngles.y) * Mathf.PI / 180) + pawn.mover.body.transform.position.x,
                             0.5f,
                             3 * Mathf.Cos((bodyFieldOfView * (i - 9) / 10 + pawn.mover.body.transform.eulerAngles.y) * Mathf.PI / 180) + pawn.mover.body.transform.position.z),
-                        Color.red, 0.5f);
+                        Color.red, sightCacheDelay);
                     Debug.DrawLine(
                         new Vector3(
                             4 * Mathf.Sin((turretFieldOfView * (i - 10) / 10 + pawn.mover.turret.transform.eulerAngles.y) * Mathf.PI / 180) + pawn.mover.turret.transform.position.x,
@@ -163,12 +163,12 @@ public class AIController : Controller
                             4 * Mathf.Sin((turretFieldOfView * (i - 9) / 10 + pawn.mover.turret.transform.eulerAngles.y) * Mathf.PI / 180) + pawn.mover.turret.transform.position.x,
                             0.5f,
                             4 * Mathf.Cos((turretFieldOfView * (i - 9) / 10 + pawn.mover.turret.transform.eulerAngles.y) * Mathf.PI / 180) + pawn.mover.turret.transform.position.z),
-                        Color.red, 0.5f);
+                        Color.red, sightCacheDelay);
                 }
 
                 RaycastHit hit;
                 Physics.Raycast(transform.position, aiToTarget, out hit);
-                Debug.DrawLine(transform.position, transform.position + (aiToTarget.normalized * hit.distance), Color.red, 0.5f);
+                Debug.DrawLine(transform.position, transform.position + (aiToTarget.normalized * hit.distance), Color.red, sightCacheDelay);
             }
 
             //Returns false if the player is outside the field of view.
