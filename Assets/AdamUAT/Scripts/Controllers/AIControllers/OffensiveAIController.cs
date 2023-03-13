@@ -201,7 +201,6 @@ public class OffensiveAIController : AIController
                     }
                     break;
                 case lookState.casual:
-                    Debug.Log("alkdjflak");
                     //new random angle every few seconds. Turret almost never stops moving.
                     if (Time.time > turretTimer)
                     {
@@ -216,6 +215,18 @@ public class OffensiveAIController : AIController
                     }
                     break;
                 case lookState.paranoid:
+                    //new random angle every few seconds. Turret almost never stops moving.
+                    if (Time.time > turretTimer)
+                    {
+                        //Create a new angle and timer.
+                        turretTimer = Time.time + Random.Range(0.5f, 1.25f);
+                        turretAngleGoal += Random.Range(45, 180); //The turret could look in any direction
+                    }
+                    else
+                    {
+                        //After moving to a new angle.
+                        pawn.mover.TurretRotateAngle(turretAngleGoal, 33);
+                    }
                     break;
                 case lookState.side:
                     break;
@@ -284,6 +295,9 @@ public class OffensiveAIController : AIController
                 turretAngleGoal = Random.Range(-66, 66);
                 break;
             case lookState.paranoid:
+                //new random angle every few seconds.
+                turretTimer = Time.time + Random.Range(0.5f, 1.25f);
+                turretAngleGoal += Random.Range(45, 180); //The turret could look in any direction
                 break;
             case lookState.side:
                 break;
