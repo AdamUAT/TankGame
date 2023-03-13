@@ -489,12 +489,13 @@ MonoBehaviour:
   pawn: {fileID: 8179522848088298622}
   currentState: 0
   target: {fileID: 0}
-  sightCacheDelay: 0.5
+  sightCacheDelay: 0.25
   hearingRange: 20
   bodyFieldOfView: 45
   turretFieldOfView: 60
   eyesight: 15
   navMesh: {fileID: 0}
+  debugMode: 0
   wanderRadiusMax: 30
   wanderRadiusMin: 15
   searchDelay: 5

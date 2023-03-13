@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 using static UnityEngine.GraphicsBuffer;
@@ -15,6 +17,20 @@ public class OffensiveAIController : AIController
     protected float searchDelay = 5; //The delay between when the AI loses sight of the player and moves closer.
     [SerializeField]
     protected float followDistance = 5; //The distance in units the enemy will stay away from the player until moving closer.
+
+    //CANNOT change the int value of the enum, it would mess up how they are assigned.
+    protected enum lookState { straight, narrow, casual, paranoid, back, side}
+    [SerializeField]
+    protected lookState currentLookState;
+    [SerializeField]
+    protected float[] lookStateWeights = { 0.5f, 1.25f, 2.5f, 0.5f, 1, 1, }; //The weighted odds of which lookState would be chosen.
+    [SerializeField]
+    protected float minLookTime = 5.0f;
+    [SerializeField]
+    protected float maxLookTime = 15.0f;
+    protected float endLookTime;
+    protected float turretAngleGoal;
+    protected float turretTimer;
 
     protected override void Start()
     {
@@ -150,8 +166,136 @@ public class OffensiveAIController : AIController
         if(CanSee(target))
         {
             ChangeState(AIState.Chase);
+            return; //Do not 
+        }
+
+        //Semi-random movement of the turret.
+        DoLookWanderState();
+    }
+
+    /// <summary>
+    /// A sub-FSM for the Wander state that controlls where the tank turret is looking.
+    /// </summary>
+    protected void DoLookWanderState()
+    {
+        if (Time.time < endLookTime)
+        {
+            switch (currentLookState)
+            {
+                case lookState.straight:
+                    //Keeps the turret facing forward.
+                    pawn.mover.TurretRotateAngle(0, 45);
+                    break;
+                case lookState.narrow:
+                    //new random angle every few seconds. Turret almost never stops moving.
+                    if(Time.time > turretTimer)
+                    {
+                        //Create a new angle and timer.
+                        turretTimer = Time.time + Random.Range(0.25f, 1);
+                        turretAngleGoal = Random.Range(-33, 33);
+                    }
+                    else
+                    {
+                        //It's slow.
+                        pawn.mover.TurretRotateAngle(turretAngleGoal, 33);
+                    }
+                    break;
+                case lookState.casual:
+                    Debug.Log("alkdjflak");
+                    //new random angle every few seconds. Turret almost never stops moving.
+                    if (Time.time > turretTimer)
+                    {
+                        //Create a new angle and timer.
+                        turretTimer = Time.time + Random.Range(0.25f, 1);
+                        turretAngleGoal = Random.Range(-66, 66);
+                    }
+                    else
+                    {
+                        //It's slow.
+                        pawn.mover.TurretRotateAngle(turretAngleGoal, 33);
+                    }
+                    break;
+                case lookState.paranoid:
+                    break;
+                case lookState.side:
+                    break;
+                case lookState.back:
+                    break;
+                default:
+                    Debug.LogWarning("Offensive Tank's Wander state had its sub-state go out of bounds.");
+                    break;
+
+            }
+        }
+        else
+        {
+            //Choose a new sub-state to follow.
+            StartLookWanderState();
         }
     }
+
+    /// <summary>
+    /// Decides which Wander sub-state is active and for how long.
+    /// </summary>
+    protected void StartLookWanderState()
+    {
+        //Randomizes how long the turret will stay in a sub-state.
+        endLookTime = Time.time + Random.Range(minLookTime, maxLookTime);
+
+        //Gets the total weight values for the states.
+        float totalWeight = 0;
+        foreach(float weight in lookStateWeights)
+        {
+            totalWeight += weight;
+        }
+
+        //Chooses a random float in the range of the weights
+        float random = Random.Range(0, totalWeight);
+
+        //Checks to see which state fits the random number chosen.
+        float weightIncrement = 0;
+        for(int i = 0; i < lookStateWeights.Length; i++)
+        {
+            if(weightIncrement <= random && weightIncrement + lookStateWeights[i] >= random)
+            {
+                //Converts the enum into its integer equivalent. This only works if the enum stays with the default start at 0 increment by 1.
+                currentLookState = (lookState)i;
+                break; //Stops the rest of the loop from occuring
+            }
+
+            weightIncrement += lookStateWeights[i];
+        }
+
+        //Starts some of the LookStates
+        switch (currentLookState)
+        {
+            case lookState.straight:
+                break;
+            case lookState.narrow:
+                //randomizes how long the first angle will last.
+                turretTimer = Time.time + Random.Range(0.25f, 1);
+                //Randomizes the angle of the turret. It's a narrower version of casual.
+                turretAngleGoal = Random.Range(-33, 33);
+                break;
+            case lookState.casual:
+                //randomizes how long the first angle will last.
+                turretTimer = Time.time + Random.Range(0.25f, 1);
+                //Randomizes the angle of the turret.
+                turretAngleGoal = Random.Range(-66, 66);
+                break;
+            case lookState.paranoid:
+                break;
+            case lookState.side:
+                break;
+            case lookState.back:
+                break;
+            default:
+                Debug.LogWarning("Offensive Tank's Wander state had its sub-state go out of bounds.");
+                break;
+
+        }
+    }
+
     /// <summary>
     /// Choose a new target location for the tank to wander towards. 
     /// </summary>
@@ -161,6 +305,8 @@ public class OffensiveAIController : AIController
         {
             ChangeState(AIState.Scan);
         }
+
+        StartLookWanderState();
     }
 
     /// <summary>
