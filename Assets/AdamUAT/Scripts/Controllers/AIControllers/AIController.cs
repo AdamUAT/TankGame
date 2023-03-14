@@ -126,19 +126,21 @@ public class AIController : Controller
     {
 
     }
-    
+
     /// <summary>
     /// Checks to see if the AI controller is able to see its target.
     /// </summary>
+    /// <param name="_target">The GameObject this AI checks if it can see. If passing in the player, pass in the turret from the TankMover script, because the player's position is too low to the ground. </param>
     /// <returns>Returns true if the target is in the AI controller's field of view, or returns the output of the last time time this function was called if it was called less than sightCacheDelay seconds ago.</returns>
     public virtual bool CanSee(GameObject _target)
     {
         if (Time.time > sightCacheTimer + sightCacheDelay)
         {
-            // Find the vector from the AI to the target
-            Vector3 aiToTarget = _target.transform.position - transform.position;
+            // Find the vector from the AI to the target.
+            Vector3 aiToTarget = _target.transform.position - pawn.mover.turret.transform.position;
             // Find the angle between the direction our AI is facing (forward in local space) and the vector to the target.
-            float angleToTarget = Vector3.Angle(aiToTarget, pawn.transform.forward);
+            float angleToTargetFromBody = Vector3.Angle(aiToTarget, pawn.mover.body.transform.forward); 
+            float angleToTargetFromTurret = Vector3.Angle(aiToTarget, pawn.mover.turret.transform.forward); //Need to have the turret angle seperate from the body, otherwise stuff gets weird.
 
             if (debugMode)
             {
@@ -167,16 +169,19 @@ public class AIController : Controller
                 }
 
                 RaycastHit hit;
-                Physics.Raycast(transform.position, aiToTarget, out hit);
-                Debug.DrawLine(transform.position, transform.position + (aiToTarget.normalized * hit.distance), Color.red, sightCacheDelay);
+                Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget, out hit);
+                Debug.DrawLine(pawn.mover.turret.transform.position, pawn.mover.turret.transform.position + (aiToTarget.normalized * hit.distance), Color.red, sightCacheDelay);
             }
 
-            //Returns false if the player is outside the field of view.
+            //Debug.Log("Outside FOV: " + (angleToTargetFromTurret > turretFieldOfView ||
+            //    angleToTargetFromTurret < -turretFieldOfView) + "\nangleToTargetFromTurret: " + angleToTargetFromTurret + "\nrotation: " + pawn.mover.turret.transform.eulerAngles.y);
+
+            //Checks to see if the player is outside the field of view.
             if (
-                (angleToTarget > pawn.mover.body.transform.rotation.y + bodyFieldOfView || 
-                angleToTarget < pawn.mover.body.transform.rotation.y - bodyFieldOfView) &&
-                (angleToTarget > pawn.mover.turret.transform.position.y + turretFieldOfView || 
-                angleToTarget < pawn.mover.turret.transform.position.y - turretFieldOfView))
+                (angleToTargetFromBody > bodyFieldOfView ||
+                angleToTargetFromBody < - bodyFieldOfView) &&
+                (angleToTargetFromTurret > turretFieldOfView ||
+                angleToTargetFromTurret < - turretFieldOfView))
             {
                 sightCache = false;
                 sightCacheTimer = Time.time;
@@ -184,17 +189,18 @@ public class AIController : Controller
             }
             else
             {
-                //This creates a layer mask that will only collide against the Player (layer 12).
-                int layerMask = 1 << 12; //Add layer 12 to the mask
+                
+                RaycastHit hit;
 
+                //If the raycast hits something, then check to see if it's the player.
                 //Returns true if the raycast hits a player.
-                if (Physics.Raycast(transform.position, aiToTarget, eyesight, layerMask))
+                if (Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget, out hit, eyesight) && hit.transform.gameObject.tag == "Player")
                 {
                     //If it didn't hit a wall, then there must be line of sight for the player.
                     sightCache = true;
                     sightCacheTimer = Time.time;
                     lastTargetLocation = _target.transform.position; //Saves the position of the player.
-                    Debug.LogError("Tank saw the player");
+                    Debug.Log("Tank saw the player");
                     return true;
                 }
                 else
@@ -203,12 +209,15 @@ public class AIController : Controller
 
                     //Adds the perpendicular of the line with a magnitude equal to the radius of the enemy to the line between the player and the AI. this makes it so the line is from the AI to the left and right sides of the player that the AI is facing.
                     //Although the collider is a square, this math acts like its a sphere. This works since the actual collider is larger.
-                    if (Physics.Raycast(transform.position, aiToTarget + perpendicular.normalized * 1.1f, eyesight, layerMask) || Physics.Raycast(transform.position, aiToTarget + perpendicular.normalized * -1.1f, eyesight, layerMask))
+                    RaycastHit hit2;
+
+                    if (Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget + perpendicular.normalized * 1.1f, out hit, eyesight) && hit.transform.gameObject.tag == "Player" ||
+                        Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget + perpendicular.normalized * -1.1f, out hit2, eyesight) && hit2.transform.gameObject.tag == "Player")
                     {
                         sightCache = true;
                         sightCacheTimer = Time.time;
                         lastTargetLocation = _target.transform.position; //Saves the position of the player
-                        Debug.LogError("Tank saw the player");
+                        Debug.Log("Tank saw the player");
                         return true; //One of the raycasts hit the player. That means the player is actively peeking around a corner. This prevents the player from aranging themselves to somehow shoot the enemy while the AI thinks there behind a wall.
                     }
                     else
