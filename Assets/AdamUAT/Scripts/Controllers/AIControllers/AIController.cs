@@ -194,7 +194,7 @@ public class AIController : Controller
 
                 //If the raycast hits something, then check to see if it's the player.
                 //Returns true if the raycast hits a player.
-                if (Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget, out hit, eyesight) && hit.transform.gameObject.tag == "Player")
+                if (Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget, out hit, eyesight) && hit.transform.gameObject == target)
                 {
                     //If it didn't hit a wall, then there must be line of sight for the player.
                     sightCache = true;
@@ -211,8 +211,8 @@ public class AIController : Controller
                     //Although the collider is a square, this math acts like its a sphere. This works since the actual collider is larger.
                     RaycastHit hit2;
 
-                    if (Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget + perpendicular.normalized * 1.1f, out hit, eyesight) && hit.transform.gameObject.tag == "Player" ||
-                        Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget + perpendicular.normalized * -1.1f, out hit2, eyesight) && hit2.transform.gameObject.tag == "Player")
+                    if (Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget + perpendicular.normalized * 1.1f, out hit, eyesight) && hit.transform.gameObject == target ||
+                        Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget + perpendicular.normalized * -1.1f, out hit2, eyesight) && hit2.transform.gameObject == target)
                     {
                         sightCache = true;
                         sightCacheTimer = Time.time;
