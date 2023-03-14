@@ -18,6 +18,7 @@ public class OffensiveAIController : AIController
     [SerializeField]
     protected float followDistance = 5; //The distance in units the enemy will stay away from the player until moving closer.
 
+    #region Turret Movement
     //CANNOT change the int value of the enum, it would mess up how they are assigned.
     protected enum lookState { straight, narrow, casual, paranoid, back, side}
     [SerializeField]
@@ -31,6 +32,72 @@ public class OffensiveAIController : AIController
     protected float endLookTime;
     protected float turretAngleGoal;
     protected float turretTimer;
+    protected float sideWhichSide; //Saves which side the turret would look at during the Side state.
+    [SerializeField]
+    [Tooltip("The angular speed of the turret during the Casual and Narrow states.")]
+    protected float slowTurretMoveSpeed = 33;
+    [SerializeField]
+    [Tooltip("The angular speed of the turret during the Back, Side, and Straight states.")]
+    protected float normalTurretMoveSpeed = 45;
+    [SerializeField]
+    [Tooltip("The angular speed of the turret during the Paranoid state., in degrees per second")]
+    protected float fastTurretMoveSpeed = 90;
+    [SerializeField]
+    [Tooltip("How far the turret will randomize during Narrow state, half the arc.")]
+    protected float narrowDeltaAngle = 33;
+    [SerializeField]
+    [Tooltip("How far the turret will randomize during Casual state, half the arc.")]
+    protected float casualDeltaAngle = 66;
+    [SerializeField]
+    [Tooltip("How far the turret's randomize is excluded during the Paranoid state, in degrees.")]
+    [Range(0f, 180f)]
+    protected float paranoidExclusionAngle = 45;
+    [SerializeField]
+    [Tooltip("How far the turret will oscilate during the Paranoid state, in degrees.")]
+    protected float paranoidDeltaAngle = 10;
+    [SerializeField]
+    [Tooltip("How fast the turret will oscilate during the Paranoid state, in seconds.")]
+    protected float paranoidDeltaPeriod = 1;
+    [SerializeField]
+    [Tooltip("What angle the turret considers the \"side\".")]
+    protected float sideSideAngle = 90;
+    [SerializeField]
+    [Tooltip("How far the turret will randomize during Side state, half the arc.")]
+    protected float sideDeltaAngle = 66;
+    [SerializeField]
+    [Tooltip("How far the turret will randomize during Back state, half the arc.")]
+    protected float backDeltaAngle = 66;
+    [SerializeField]
+    [Tooltip("The minimum duration the turret will stay on a single angle during the Narrow state")]
+    protected float minNarrowAngleDuration = 0.25f;
+    [SerializeField]
+    [Tooltip("The maximum duration the turret will stay on a single angle during the Narrow state")]
+    protected float maxNarrowAngleDuration = 1;
+    [SerializeField]
+    [Tooltip("The minimum duration the turret will stay on a single angle during the Casual state")]
+    protected float minCasualAngleDuration = 0.25f;
+    [SerializeField]
+    [Tooltip("The maximum duration the turret will stay on a single angle during the Casual state")]
+    protected float maxCasualAngleDuration = 1;
+    [SerializeField]
+    [Tooltip("The minimum duration the turret will stay on a single angle during the Paranoid state")]
+    protected float minParanoidAngleDuration = 0.5f;
+    [SerializeField]
+    [Tooltip("The maximum duration the turret will stay on a single angle during the Paranoid state")]
+    protected float maxParanoidAngleDuration = 1.25f;
+    [SerializeField]
+    [Tooltip("The minimum duration the turret will stay on a single angle during the Paranoid state")]
+    protected float minSideAngleDuration = 0.25f;
+    [SerializeField]
+    [Tooltip("The maximum duration the turret will stay on a single angle during the Paranoid state")]
+    protected float maxSideAngleDuration = 1; 
+    [SerializeField]
+    [Tooltip("The minimum duration the turret will stay on a single angle during the Paranoid state")]
+    protected float minBackAngleDuration = 0.25f;
+    [SerializeField]
+    [Tooltip("The maximum duration the turret will stay on a single angle during the Paranoid state")]
+    protected float maxBackAngleDuration = 1;
+    #endregion Turret Movement
 
     protected override void Start()
     {
@@ -131,6 +198,9 @@ public class OffensiveAIController : AIController
             case AIState.Alert:
                 DoAlertState();
                 break;
+            case AIState.Idle:
+                //A default state that doesn't do anything.
+                break;
             default:
                 Debug.LogWarning("Offensive Tank had its state go out of bounds.");
                 break;
@@ -163,7 +233,7 @@ public class OffensiveAIController : AIController
         }
 
         //Checks to see if the AI can see the player
-        if(CanSee(target))
+        if(CanSee(target.GetComponent<TankMover>().turret))
         {
             ChangeState(AIState.Chase);
             return; //Do not 
@@ -184,20 +254,20 @@ public class OffensiveAIController : AIController
             {
                 case lookState.straight:
                     //Keeps the turret facing forward.
-                    pawn.mover.TurretRotateAngle(0, 45);
+                    pawn.mover.TurretRotateAngle(0, normalTurretMoveSpeed);
                     break;
                 case lookState.narrow:
                     //new random angle every few seconds. Turret almost never stops moving.
                     if(Time.time > turretTimer)
                     {
                         //Create a new angle and timer.
-                        turretTimer = Time.time + Random.Range(0.25f, 1);
-                        turretAngleGoal = Random.Range(-33, 33);
+                        turretTimer = Time.time + Random.Range(minNarrowAngleDuration, maxNarrowAngleDuration);
+                        turretAngleGoal = Random.Range(-narrowDeltaAngle, narrowDeltaAngle);
                     }
                     else
                     {
                         //It's slow.
-                        pawn.mover.TurretRotateAngle(turretAngleGoal, 33);
+                        pawn.mover.TurretRotateAngle(turretAngleGoal, slowTurretMoveSpeed);
                     }
                     break;
                 case lookState.casual:
@@ -205,13 +275,12 @@ public class OffensiveAIController : AIController
                     if (Time.time > turretTimer)
                     {
                         //Create a new angle and timer.
-                        turretTimer = Time.time + Random.Range(0.25f, 1);
-                        turretAngleGoal = Random.Range(-66, 66);
+                        turretTimer = Time.time + Random.Range(minCasualAngleDuration, maxCasualAngleDuration);
+                        turretAngleGoal = Random.Range(-casualDeltaAngle, casualDeltaAngle);
                     }
                     else
                     {
-                        //It's slow.
-                        pawn.mover.TurretRotateAngle(turretAngleGoal, 33);
+                        pawn.mover.TurretRotateAngle(turretAngleGoal, slowTurretMoveSpeed);
                     }
                     break;
                 case lookState.paranoid:
@@ -219,18 +288,39 @@ public class OffensiveAIController : AIController
                     if (Time.time > turretTimer)
                     {
                         //Create a new angle and timer.
-                        turretTimer = Time.time + Random.Range(0.5f, 1.25f);
-                        turretAngleGoal += Random.Range(45, 180); //The turret could look in any direction
+                        turretTimer = Time.time + Random.Range(minParanoidAngleDuration, maxParanoidAngleDuration);
+                        turretAngleGoal += Random.Range(0 + paranoidExclusionAngle, 360 - paranoidExclusionAngle); //The turret could look in any direction, but it will look at least some degrees away from its current angle.
                     }
                     else
                     {
-                        //After moving to a new angle.
-                        pawn.mover.TurretRotateAngle(turretAngleGoal, 33);
+                        pawn.mover.TurretRotateAngle(turretAngleGoal + paranoidDeltaAngle * Mathf.Sin(Time.time / paranoidDeltaPeriod * Mathf.PI * 2), fastTurretMoveSpeed);
                     }
                     break;
                 case lookState.side:
+                    //Side is essentially casual but on either the left or right side.
+                    if (Time.time > turretTimer)
+                    {
+                        //Create a new angle and timer.
+                        turretTimer = Time.time + Random.Range(minCasualAngleDuration, maxCasualAngleDuration);
+                        turretAngleGoal = Random.Range(-casualDeltaAngle, casualDeltaAngle) + sideWhichSide;
+                    }
+                    else
+                    {
+                        pawn.mover.TurretRotateAngle(turretAngleGoal, normalTurretMoveSpeed);
+                    }
                     break;
                 case lookState.back:
+                    //Back is essentially casual but 180.
+                    if (Time.time > turretTimer)
+                    {
+                        //Create a new angle and timer.
+                        turretTimer = Time.time + Random.Range(minCasualAngleDuration, maxCasualAngleDuration);
+                        turretAngleGoal = Random.Range(-casualDeltaAngle, casualDeltaAngle) + 180;
+                    }
+                    else
+                    {
+                        pawn.mover.TurretRotateAngle(turretAngleGoal, normalTurretMoveSpeed);
+                    }
                     break;
                 default:
                     Debug.LogWarning("Offensive Tank's Wander state had its sub-state go out of bounds.");
@@ -284,22 +374,26 @@ public class OffensiveAIController : AIController
                 break;
             case lookState.narrow:
                 //randomizes how long the first angle will last.
-                turretTimer = Time.time + Random.Range(0.25f, 1);
+                turretTimer = Time.time + Random.Range(minNarrowAngleDuration, maxNarrowAngleDuration);
                 //Randomizes the angle of the turret. It's a narrower version of casual.
-                turretAngleGoal = Random.Range(-33, 33);
+                turretAngleGoal = Random.Range(-narrowDeltaAngle, narrowDeltaAngle);
                 break;
             case lookState.casual:
                 //randomizes how long the first angle will last.
                 turretTimer = Time.time + Random.Range(0.25f, 1);
                 //Randomizes the angle of the turret.
-                turretAngleGoal = Random.Range(-66, 66);
+                turretAngleGoal = Random.Range(-casualDeltaAngle, casualDeltaAngle);
                 break;
             case lookState.paranoid:
                 //new random angle every few seconds.
                 turretTimer = Time.time + Random.Range(0.5f, 1.25f);
-                turretAngleGoal += Random.Range(45, 180); //The turret could look in any direction
+                turretAngleGoal += Random.Range(0 + paranoidExclusionAngle, 360 - paranoidExclusionAngle); //The turret could look in any direction, but it will look at least 45 degrees away from its current angle.
                 break;
             case lookState.side:
+                //Also randomizes a side the turret will look at.
+                turretTimer = Time.time + Random.Range(minCasualAngleDuration, maxCasualAngleDuration);
+                sideWhichSide = (Random.value < 0.5f ? -1 : 1) * sideSideAngle;
+                turretAngleGoal = Random.Range(-casualDeltaAngle, casualDeltaAngle) + sideWhichSide;
                 break;
             case lookState.back:
                 break;
@@ -338,7 +432,7 @@ public class OffensiveAIController : AIController
     /// <returns>Returns true if it found a valid position.</returns>
     protected bool FindWanderTarget(int limit)
     {
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < limit; i++)
         {
             //This will randomly select a spot. If it doens't find a spot within 10 tries, then it will turn to idle state.
             //In addition to randomizing direction, it also randomizes the distance.
@@ -365,7 +459,12 @@ public class OffensiveAIController : AIController
     /// </summary>
     public void DoScanState()
     {
-        if(Time.time >= lastStateChangeTime + 8.0f)
+        if (CanSee(target.GetComponent<TankMover>().turret))
+        {
+            ChangeState(AIState.Chase);
+        }
+
+        if (Time.time >= lastStateChangeTime + 8.0f)
         {
             ChangeState(AIState.Wander);
         }
@@ -381,11 +480,6 @@ public class OffensiveAIController : AIController
         {
             pawn.mover.TurretRotate(90);
         }
-
-        if(CanSee(target))
-        {
-            ChangeState(AIState.Chase);
-        }
     }
 
 
@@ -398,7 +492,7 @@ public class OffensiveAIController : AIController
     }
     protected void DoChaseState()
     {
-        if(CanSee(target))
+        if(CanSee(target.GetComponent<TankMover>().turret))
         {
             lastStateChangeTime = Time.time; //Tells the timer when the last time the enemy saw the player was.
             if(DistanceFromTarget() > followDistance)
