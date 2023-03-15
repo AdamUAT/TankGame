@@ -40,7 +40,7 @@ public class OffensiveAIController : AIController
     [Tooltip("The angular speed of the turret during the Back, Side, and Straight states.")]
     protected float normalTurretMoveSpeed = 45;
     [SerializeField]
-    [Tooltip("The angular speed of the turret during the Paranoid state., in degrees per second")]
+    [Tooltip("The angular speed of the turret during the Paranoid state and during combat., in degrees per second")]
     protected float fastTurretMoveSpeed = 90;
     [SerializeField]
     [Tooltip("How far the turret will randomize during Narrow state, half the arc.")]
@@ -215,7 +215,8 @@ public class OffensiveAIController : AIController
             //If the enemy is in the chase state, then it will ignore the player firing, because it knows where the player is and is most likely firing at it.
             if (currentState != AIState.Chase)
             {
-                ChangeState(AIState.Scan);
+                lastTargetLocation = playerPosition;
+                ChangeState(AIState.Alert);
             }
         }
     }
@@ -432,6 +433,9 @@ public class OffensiveAIController : AIController
     /// <returns>Returns true if it found a valid position.</returns>
     protected bool FindWanderTarget(int limit)
     {
+        Seek(new Vector3(-45, 0.5f, -6.5f));
+        return true;
+
         for (int i = 0; i < limit; i++)
         {
             //This will randomly select a spot. If it doens't find a spot within 10 tries, then it will turn to idle state.
@@ -507,17 +511,25 @@ public class OffensiveAIController : AIController
                 {
                     pawn.mover.StopMoving();
                 }
-
-                pawn.mover.TurretRotateTowards(target);
-
-                //If the tank is looking at the tank, then it will shoot the tank.
-                Vector3 aiToTarget = target.transform.position - transform.position;
-                float angleToTarget = Vector3.Angle(aiToTarget, pawn.transform.forward);
-                if (Mathf.Abs(angleToTarget) > 5)
-                {
-                    pawn.shooter.Shoot();
-                }
             }
+
+            pawn.mover.TurretRotateTowards(target.transform.position, fastTurretMoveSpeed);
+
+            //If the tank is looking at the tank, then it will shoot the tank.
+            Vector3 aiToTarget = target.transform.position - pawn.mover.turret.transform.position;
+            //Makes it so the angle is 2d.
+            float angleToTargetFromTurret = Vector2.Angle(new Vector2(aiToTarget.x, aiToTarget.z), new Vector2(pawn.mover.turret.transform.forward.x, pawn.mover.turret.transform.forward.z)); //Need to have the turret angle seperate from the body, otherwise stuff gets weird.
+            Debug.Log(angleToTargetFromTurret);
+            //Allows a 5 degree margin
+            if (Mathf.Abs(angleToTargetFromTurret) <= 5)
+            {
+                pawn.shooter.Shoot();
+            }
+        }
+        else if(Vector3.Distance(lastTargetLocation, target.transform.position) < 2)
+        {
+            //The player is close enough to the lastTargetLocation, he is probably behind cover and not running away.
+            pawn.mover.TurretRotateTowards(lastTargetLocation, fastTurretMoveSpeed);
         }
         else if(Time.time >= lastStateChangeTime + searchDelay)
         {
@@ -560,9 +572,33 @@ public class OffensiveAIController : AIController
     {
 
     }
-    protected void DoAlertState() 
+    protected void DoAlertState()
     {
-        
+        if (CanSee(target.GetComponent<TankMover>().turret))
+        {
+            ChangeState(AIState.Chase);
+        }
+
+        if(Time.time <= lastStateChangeTime + 1.5f && Time.time >= lastStateChangeTime)
+        {
+            pawn.mover.TurretRotateTowards(target.transform.position, fastTurretMoveSpeed);
+        }
+        else if(Vector3.Distance(transform.position, lastTargetLocation) < 7.5) //If the enemy is close enough to the player, it will move to where it heard the player.
+        {
+            ChangeState(AIState.Search);
+        }
+        if (Time.time >= lastStateChangeTime + 10.0f)
+        {
+            ChangeState(AIState.Wander);
+        } //If the player is too far away, it will slightly move the turret in the direction it heard the player.
+        else if (Time.time <= lastStateChangeTime + 6.0f && Time.time >= lastStateChangeTime + 4.0f)
+        {
+            pawn.mover.TurretRotate(-15);
+        }
+        else if (Time.time <= lastStateChangeTime + 3.0f && Time.time >= lastStateChangeTime + 2f)
+        {
+            pawn.mover.TurretRotate(15);
+        }
     }
     protected void EndAlertState() 
     {

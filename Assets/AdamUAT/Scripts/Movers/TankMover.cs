@@ -101,16 +101,17 @@ public class TankMover : MonoBehaviour
     }
 
     /// <summary>
-    /// Rotates the tank towards a specific location, instead of a direction.
+    /// Rotates the turret towards a specific location, instead of a direction.
     /// </summary>
     /// <param name="targetPosition">The location the tank will rotate towards.</param>
     /// <param name="_turnSpeed">How fast the tank will rotate towards the target.</param>
-    public virtual void RotateTowards(Vector3 targetPosition, float _turnSpeed)
+    public virtual void TurretRotateTowards(Vector3 targetPosition, float _turnSpeed)
     {
-        Vector3 vectorToTarget = targetPosition - transform.position;
+        Vector3 vectorToTarget = targetPosition - turret.transform.position;
+        vectorToTarget.y = 0;
         Quaternion targetRotation = Quaternion.LookRotation(vectorToTarget, Vector3.up);
 
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _turnSpeed * Time.deltaTime);
+        turret.transform.rotation = Quaternion.RotateTowards(turret.transform.rotation, targetRotation, _turnSpeed * Time.deltaTime);
     }
 
     /// <summary>
