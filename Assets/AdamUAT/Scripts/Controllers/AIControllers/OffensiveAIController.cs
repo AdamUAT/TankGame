@@ -227,8 +227,9 @@ public class OffensiveAIController : AIController
     /// </summary>
     protected void DoWanderState()
     {
+        Debug.Log(targetLocation + "\n" + transform.position);
         //The check takes into consider floating-point errors by checking if the distance is less-than.
-        if (Vector3.Distance(targetLocation, transform.position) <= 0.1)
+        if (Vector2.Distance(new Vector2(targetLocation.x, targetLocation.z), new Vector2(transform.position.x, transform.position.z)) <= 0.1)
         {
             ChangeState(AIState.Scan); //When the enemy reaches its wandering target, it will idle for a few seconds.
         }
@@ -519,14 +520,13 @@ public class OffensiveAIController : AIController
             Vector3 aiToTarget = target.transform.position - pawn.mover.turret.transform.position;
             //Makes it so the angle is 2d.
             float angleToTargetFromTurret = Vector2.Angle(new Vector2(aiToTarget.x, aiToTarget.z), new Vector2(pawn.mover.turret.transform.forward.x, pawn.mover.turret.transform.forward.z)); //Need to have the turret angle seperate from the body, otherwise stuff gets weird.
-            Debug.Log(angleToTargetFromTurret);
             //Allows a 5 degree margin
             if (Mathf.Abs(angleToTargetFromTurret) <= 5)
             {
                 pawn.shooter.Shoot();
             }
         }
-        else if(Vector3.Distance(lastTargetLocation, target.transform.position) < 2)
+        else if(Vector3.Distance(lastTargetLocation, target.transform.position) < 5)
         {
             //The player is close enough to the lastTargetLocation, he is probably behind cover and not running away.
             pawn.mover.TurretRotateTowards(lastTargetLocation, fastTurretMoveSpeed);
@@ -551,8 +551,16 @@ public class OffensiveAIController : AIController
     }
     protected void DoSearchState()
     {
+        if (CanSee(target.GetComponent<TankMover>().turret))
+        {
+            ChangeState(AIState.Chase);
+        }
+
         //Moves the enemy to the last known location of the player.
         Seek(lastTargetLocation);
+
+        //Keep the turret pointed towards the destination.
+        pawn.mover.TurretRotateTowards(lastTargetLocation, fastTurretMoveSpeed);
 
         //This should make sure enough time has passed that the frames have calculated enough for IsMoving to actually return a real result.
         if (Time.time >= lastStateChangeTime + 0.1)
@@ -579,9 +587,10 @@ public class OffensiveAIController : AIController
             ChangeState(AIState.Chase);
         }
 
+
         if(Time.time <= lastStateChangeTime + 1.5f && Time.time >= lastStateChangeTime)
         {
-            pawn.mover.TurretRotateTowards(target.transform.position, fastTurretMoveSpeed);
+            pawn.mover.TurretRotateTowards(lastTargetLocation, fastTurretMoveSpeed);
         }
         else if(Vector3.Distance(transform.position, lastTargetLocation) < 7.5) //If the enemy is close enough to the player, it will move to where it heard the player.
         {
