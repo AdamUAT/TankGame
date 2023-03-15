@@ -138,9 +138,9 @@ public class AIController : Controller
         {
             // Find the vector from the AI to the target.
             Vector3 aiToTarget = _target.transform.position - pawn.mover.turret.transform.position;
-            // Find the angle between the direction our AI is facing (forward in local space) and the vector to the target.
-            float angleToTargetFromBody = Vector3.Angle(aiToTarget, pawn.mover.body.transform.forward); 
-            float angleToTargetFromTurret = Vector3.Angle(aiToTarget, pawn.mover.turret.transform.forward); //Need to have the turret angle seperate from the body, otherwise stuff gets weird.
+            // Find the angle between the direction our AI is facing and the vector to the target in 2D space.
+            float angleToTargetFromBody = Vector2.Angle(new Vector2(aiToTarget.x, aiToTarget.z), new Vector2(pawn.mover.body.transform.forward.x, pawn.mover.body.transform.forward.z)); 
+            float angleToTargetFromTurret = Vector2.Angle(new Vector2(aiToTarget.x, aiToTarget.z), new Vector2(pawn.mover.turret.transform.forward.x, pawn.mover.turret.transform.forward.z)); //Need to have the turret angle seperate from the body, otherwise stuff gets weird.
 
             if (debugMode)
             {
@@ -200,7 +200,6 @@ public class AIController : Controller
                     sightCache = true;
                     sightCacheTimer = Time.time;
                     lastTargetLocation = _target.transform.position; //Saves the position of the player.
-                    Debug.Log("Tank saw the player");
                     return true;
                 }
                 else
@@ -217,7 +216,6 @@ public class AIController : Controller
                         sightCache = true;
                         sightCacheTimer = Time.time;
                         lastTargetLocation = _target.transform.position; //Saves the position of the player
-                        Debug.Log("Tank saw the player");
                         return true; //One of the raycasts hit the player. That means the player is actively peeking around a corner. This prevents the player from aranging themselves to somehow shoot the enemy while the AI thinks there behind a wall.
                     }
                     else
