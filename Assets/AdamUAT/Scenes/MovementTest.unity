@@ -2150,9 +2150,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 220f4e4e316e5664cb94348eea04f930, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultPowerup: {fileID: -876546973899608171, guid: 92d611cb97194bf4b9d9ba018488e3fd,
+  defaultPowerupMaterial: {fileID: -876546973899608171, guid: 92d611cb97194bf4b9d9ba018488e3fd,
     type: 3}
-  healthPowerup: {fileID: 2100000, guid: e1883f3dc0bb3324f974d8e1ee361a47, type: 2}
+  healthPowerupMaterial: {fileID: 2100000, guid: e1883f3dc0bb3324f974d8e1ee361a47,
+    type: 2}
+  speedPowerupMaterial: {fileID: 0}
+  healthPowerupAmount: 20
+  speedPowerupAmount: 0.5
+  healthPowerupDuration: 5
 --- !u!1 &1765111742
 GameObject:
   m_ObjectHideFlags: 0
@@ -2634,6 +2639,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5643731828323027279, guid: 47e4ee9abba4c3845939c638c73f16c9,
+        type: 3}
+      propertyPath: powerup
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 47e4ee9abba4c3845939c638c73f16c9, type: 3}
 --- !u!1001 &5892339853279845826
@@ -2777,16 +2787,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8179522848088298618, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_Radius
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8179522848088298618, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_Height
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8179522848088298620, guid: dccaa1d0f3491014c9e69babcf50811b,
         type: 3}

@@ -16,7 +16,7 @@ public class TankMover : MonoBehaviour
     public GameObject turret;
 
     [SerializeField]
-    protected float moveSpeed;
+    public float moveSpeed;
     [SerializeField]
     protected float turnSpeed;
 
@@ -162,6 +162,16 @@ public class TankMover : MonoBehaviour
     public void TurretRotateAngle(float eulerAngle, float turretRotationSpeed)
     {
         turret.transform.rotation = Quaternion.RotateTowards(turret.transform.rotation, Quaternion.Euler(0, eulerAngle + body.transform.eulerAngles.y, 0), turretRotationSpeed * Time.deltaTime);
+    }
+
+    /// <summary>
+    /// Increases the speed of the pawn's movement.
+    /// </summary>
+    /// <param name="percentage">Percentage is represented in decimal form.</param>
+    public virtual void SpeedBoost(float percentage)
+    {
+        moveSpeed += moveSpeed * percentage;
+        turnSpeed += turnSpeed * percentage;
     }
 
     #region NavMesh-based movement virtual functions
