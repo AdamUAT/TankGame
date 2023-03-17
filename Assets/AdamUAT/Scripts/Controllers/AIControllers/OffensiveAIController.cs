@@ -17,7 +17,9 @@ public class OffensiveAIController : AIController
     protected float searchDelay = 5; //The delay between when the AI loses sight of the player and moves closer.
     [SerializeField]
     protected float followDistance = 5; //The distance in units the enemy will stay away from the player until moving closer.
-
+    [SerializeField]
+    [Tooltip("Half the arc, in degrees, that the tank's turret can face the player and shoot.")]
+    protected float shootFOV = 5;
     #region Turret Movement
     //CANNOT change the int value of the enum, it would mess up how they are assigned.
     protected enum lookState { straight, narrow, casual, paranoid, back, side}
@@ -227,7 +229,6 @@ public class OffensiveAIController : AIController
     /// </summary>
     protected void DoWanderState()
     {
-        Debug.Log(targetLocation + "\n" + transform.position);
         //The check takes into consider floating-point errors by checking if the distance is less-than.
         if (Vector2.Distance(new Vector2(targetLocation.x, targetLocation.z), new Vector2(transform.position.x, transform.position.z)) <= 0.1)
         {
@@ -521,10 +522,17 @@ public class OffensiveAIController : AIController
             //Makes it so the angle is 2d.
             float angleToTargetFromTurret = Vector2.Angle(new Vector2(aiToTarget.x, aiToTarget.z), new Vector2(pawn.mover.turret.transform.forward.x, pawn.mover.turret.transform.forward.z)); //Need to have the turret angle seperate from the body, otherwise stuff gets weird.
             //Allows a 5 degree margin
-            if (Mathf.Abs(angleToTargetFromTurret) <= 5)
+            if (Mathf.Abs(angleToTargetFromTurret) <= shootFOV)
             {
                 pawn.shooter.Shoot();
             }
+        }
+        else if(Time.time <= lastStateChangeTime + 1)
+        {
+            //Will continue tracking the player for 1 second after loosing sight.
+            Seek(target);
+            pawn.mover.TurretRotateTowards(target.transform.position, fastTurretMoveSpeed);
+
         }
         else if(Vector3.Distance(lastTargetLocation, target.transform.position) < 5)
         {

@@ -424,6 +424,8 @@ GameObject:
   - component: {fileID: 8179522848088298619}
   - component: {fileID: 8179522848088298618}
   - component: {fileID: 8179522848088298620}
+  - component: {fileID: -6681161310215280774}
+  - component: {fileID: 3993183244744192173}
   m_Layer: 0
   m_Name: EnemyTank
   m_TagString: Untagged
@@ -460,6 +462,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mover: {fileID: 0}
+  health: {fileID: 0}
   shooter: {fileID: 0}
 --- !u!65 &8179522848088298623
 BoxCollider:
@@ -470,7 +473,7 @@ BoxCollider:
   m_GameObject: {fileID: 8179522848088298613}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 2.2, y: 1.9462018, z: 3}
   m_Center: {x: 0, y: 1.0268991, z: 0}
@@ -500,6 +503,7 @@ MonoBehaviour:
   wanderRadiusMin: 15
   searchDelay: 5
   followDistance: 5
+  shootFOV: 5
   currentLookState: 0
   lookStateWeights:
   - 0.5
@@ -547,7 +551,7 @@ MonoBehaviour:
   shellPrefab: {fileID: 8206576151963044968, guid: 747d5aa5d211f0b41bc4d4b590fd6f1a,
     type: 3}
   fireForce: 1000
-  damageDone: 20
+  damageDone: 10
   shellLifespan: 1.5
   isDelayReload: 1
   fireRateDelay: 1
@@ -610,6 +614,31 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0
   m_Center: {x: 0, y: 1.5, z: 0}
+--- !u!114 &-6681161310215280774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8179522848088298613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95efaaf67ec51a145bca88a0f9a4b602, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+--- !u!114 &3993183244744192173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8179522848088298613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e87235cdba0c84448f8dbdee8104961, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9077522143115071654
 GameObject:
   m_ObjectHideFlags: 0
