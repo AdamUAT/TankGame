@@ -32,7 +32,7 @@ public class Pickup : MonoBehaviour
         if (powerupManager != null && isCollectable)
         {
             // Add the powerup
-            //powerupManager.Add(powerup);
+            powerupManager.Add(Powerups.powerups[(int)powerup]);
 
             //Makes the pickup appear as if it doesn't have a collectable to pick up.
             powerupMesh.SetActive(false);

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    private float currentHealth;
+    public float currentHealth;
     [SerializeField]
     private float maxHealth;
 
@@ -23,6 +23,17 @@ public class Health : MonoBehaviour
         {
             Die(source);
         }
+    }
+
+    /// <summary>
+    /// Increases the health of the pawn.
+    /// </summary>
+    /// <param name="amount">The amount to increase the health</param>
+    /// <param name="source">The pawn that caused the healing.</param>
+    public void Heal(float amount, Pawn source)
+    {
+        currentHealth += amount;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
     }
 
     public void Die(Pawn source)

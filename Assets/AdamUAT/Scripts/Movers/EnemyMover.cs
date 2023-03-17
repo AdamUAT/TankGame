@@ -44,4 +44,13 @@ public class EnemyMover : TankMover
         else
             return false;
     }
+
+    public override void SpeedBoost(float percentage)
+    {
+        base.SpeedBoost(percentage);
+
+        navMeshAgent.speed += navMeshAgent.speed * percentage;
+        navMeshAgent.acceleration += navMeshAgent.acceleration * percentage;
+        navMeshAgent.angularSpeed += navMeshAgent.angularSpeed * percentage;
+    }
 }
