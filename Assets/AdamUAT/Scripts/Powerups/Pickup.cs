@@ -6,7 +6,7 @@ public class Pickup : MonoBehaviour
 {
     //The powerup this pickup gives
     [SerializeField]
-    private Powerups.powerupList powerup;
+    private Powerups.powerupList powerup = Powerups.powerupList.Empty; //Defaults to the empty powerup
 
     [SerializeField]
     [Tooltip("The odds of each powerup being chosen to respawn during the game. The initial powerup is decided by the map generation.")]
@@ -30,7 +30,7 @@ public class Pickup : MonoBehaviour
     void Start()
     {
         //Accesses the material from the list of powerups.
-        powerupMesh.GetComponent<Renderer>().material = Powerups.powerups[(int)powerup].powerupMaterial;
+        SpawnPowerup(powerup);
     }
 
     public void OnTriggerEnter(Collider other)
@@ -51,6 +51,8 @@ public class Pickup : MonoBehaviour
             nextRespawn = Time.time + respawnDelay;
 
             isCollectable = false;
+
+            GameManager.instance.pickups.Remove(this);
         }
     }
 
@@ -113,6 +115,8 @@ public class Pickup : MonoBehaviour
         powerupParticles.SetActive(true);
         
         isCollectable = true;
+
+        GameManager.instance.pickups.Add(this);
     }
 
     private void Update()
