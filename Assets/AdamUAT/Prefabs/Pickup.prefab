@@ -4906,9 +4906,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powerup: 0
+  powerupWeights:
+  - 0
+  - 50
+  - 50
+  - 0
   isCollectable: 1
   powerupMesh: {fileID: 6036395174611304412}
   powerupParticles: {fileID: 1297267936928881868}
+  respawnDelay: 10
 --- !u!1 &6036395174611304412
 GameObject:
   m_ObjectHideFlags: 0
