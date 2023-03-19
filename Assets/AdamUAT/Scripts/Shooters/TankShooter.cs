@@ -79,6 +79,16 @@ public class TankShooter : Shooter
     }
 
     /// <summary>
+    /// Decreases the delay between each shot
+    /// </summary>
+    /// <param name="percentage">Percentage is represented in decimal form.</param>
+    public void FireRateBoost(float percentage)
+    {
+        fireRateDelay *= 1 - percentage;
+        fireRate /= 1- percentage;
+    }
+
+    /// <summary>
     /// Virtual method for attacking.
     /// </summary>
     protected virtual void LaunchBullet() { }
