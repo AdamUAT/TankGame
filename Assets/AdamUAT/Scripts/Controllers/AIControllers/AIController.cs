@@ -235,6 +235,57 @@ public class AIController : Controller
             return (sightCache); //Returns the last check if this function was called in the past half second.
     }
 
+
+    /// <summary>
+    /// Checks to see if the AI controller is able to see its target, ignoring FOV restrictions
+    /// </summary>
+    /// <param name="_target">The GameObject this AI checks if it can see. If passing in the player, pass in the turret from the TankMover script, because the player's position is too low to the ground. </param>
+    /// <returns>Returns true if the target is in the AI controller's line of sight, or returns the output of the last time time this function was called if it was called less than sightCacheDelay seconds ago.</returns>
+    public bool CanSeeNoFOV(GameObject _target)
+    {
+        Vector3 aiToTarget = _target.transform.position - pawn.mover.turret.transform.position;
+
+        RaycastHit hit;
+
+        //This creates a layer mask that will only collide against Projectiles and Pickups (layers 9 & 10).
+        int layerMask = 1 << 9 << 10;
+        layerMask = ~layerMask; //This inverses the layermask, meaning the raycast will not collide against projectiles and pickups.
+
+        //If the raycast hits something, then check to see if it's the player.
+        //Returns true if the raycast hits a player.
+        if (Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget, out hit, eyesight, layerMask) && hit.transform.gameObject == target)
+        {
+            //If it didn't hit a wall, then there must be line of sight for the player.
+            sightCache = true;
+            sightCacheTimer = Time.time;
+            lastTargetLocation = _target.transform.position; //Saves the position of the player.
+            return true;
+        }
+        else
+        {
+            Vector3 perpendicular = new Vector3(-1, aiToTarget.y, aiToTarget.x / aiToTarget.z); //This gets the perpendicular vector to the line between the AI and the player.
+
+            //Adds the perpendicular of the line with a magnitude equal to the radius of the enemy to the line between the player and the AI. this makes it so the line is from the AI to the left and right sides of the player that the AI is facing.
+            //Although the collider is a square, this math acts like its a sphere. This works since the actual collider is larger.
+            RaycastHit hit2;
+
+            if (Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget + perpendicular.normalized * 1.1f, out hit, eyesight, layerMask) && hit.transform.gameObject == target ||
+                Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget + perpendicular.normalized * -1.1f, out hit2, eyesight, layerMask) && hit2.transform.gameObject == target)
+            {
+                sightCache = true;
+                sightCacheTimer = Time.time;
+                lastTargetLocation = _target.transform.position; //Saves the position of the player
+                return true; //One of the raycasts hit the player. That means the player is actively peeking around a corner. This prevents the player from aranging themselves to somehow shoot the enemy while the AI thinks there behind a wall.
+            }
+            else
+            {
+                sightCache = false;
+                sightCacheTimer = Time.time;
+                return false; //The raycast did not hit the player.
+            }
+        }
+    }
+
     public float DistanceFromTarget()
     {
         return(Vector3.Distance(target.transform.position, transform.position));

@@ -17,8 +17,9 @@ public class GameManager : MonoBehaviour
     // List that holds our player(s)
     public List<PlayerController> players;
     //All the entities that are not players.
-    public List<AIController> npcs;
-    //All pawns can be derived from the controllers.
+    public List<AIController> npcs; //All pawns can be derived from the controllers.
+    //All the pickups currently active.
+    public List<Pickup> pickups;
 
     //Prefabs
     [SerializeField]
