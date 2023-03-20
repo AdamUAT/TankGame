@@ -727,7 +727,7 @@ MonoBehaviour:
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 2359
+    m_Bits: 2103
   m_UseGeometry: 0
   m_DefaultArea: 0
   m_IgnoreNavMeshAgent: 1
@@ -2110,7 +2110,6 @@ MonoBehaviour:
     type: 3}
   tankPawnPrefab: {fileID: 6834225977138675423, guid: 1631f38664453f34595e10f3d61649a1,
     type: 3}
-  playerSpawnTransform: {fileID: 1261309612}
 --- !u!4 &1751680236
 Transform:
   m_ObjectHideFlags: 0
@@ -2665,13 +2664,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8179522848088298613, guid: dccaa1d0f3491014c9e69babcf50811b,
         type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 8179522848088298613, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5177126818534680166, guid: dccaa1d0f3491014c9e69babcf50811b,
         type: 3}
@@ -2727,76 +2721,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8179522848088298617, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: minParanoidAngleDuration
-      value: 1.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 8179522848088298617, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: maxParanoidAngleDuration
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8179522848088298617, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: paranoidDeltaPeriod
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8179522848088298617, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: fastTurretMoveSpeed
-      value: 180
-      objectReference: {fileID: 0}
-    - target: {fileID: 5892339854536126075, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 5892339854458231702, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 7181696618078084633, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 3862035998252682963, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 6183960501813337877, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 5016233914349176060, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 666969451512862845, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 9077522143115071654, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 8179522848088298623, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8179522848088298620, guid: dccaa1d0f3491014c9e69babcf50811b,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dccaa1d0f3491014c9e69babcf50811b, type: 3}

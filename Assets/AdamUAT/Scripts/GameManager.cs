@@ -63,6 +63,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void RespawnPlayer()
     {
+
         GameObject newPawnObj = Instantiate(tankPawnPrefab, FindObjectOfType<MapGenerator>().RandomRoom().playerSpawn.transform.position, Quaternion.identity);
         TankPawn newPawn = newPawnObj.GetComponent<TankPawn>();
 
@@ -72,10 +73,20 @@ public class GameManager : MonoBehaviour
             if(playerController.pawn == null)
             {
                 if (newPawn != null)
+                {
                     playerController.pawn = newPawn;
+                }
                 else
                     Debug.Log("The TankPawn prefab is missing it's TankPawn script!");
+
+                break;
             }
         }
+
+        foreach (AIController enemy in npcs)
+        {
+            enemy.target = newPawn.gameObject;
+        }
+
     }
 }

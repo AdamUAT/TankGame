@@ -122,8 +122,8 @@ public class SpeedPowerup : Powerup
         TankPawn pawn = target.GetComponent<TankPawn>();
         if (pawn != null)
         {
-            //gives a speed reduction.
-            pawn.mover.SpeedBoost(-speadIncrease);
+            //This undos the speadIncrease amount, instead of a simple percent decrease. If it was that way, the tank would get progressively slower.
+            pawn.mover.SpeedBoost(-speadIncrease / (1 + speadIncrease));
         }
     }
 }

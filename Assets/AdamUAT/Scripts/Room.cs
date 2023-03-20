@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.AI;
 
 public class Room : MonoBehaviour {
 
@@ -11,10 +12,10 @@ public class Room : MonoBehaviour {
 	public GameObject playerSpawn;
 
 	public PatrolWaypoints[] patrolWaypoints;
-	public GameObject[] wanderSpawns;
+	public GameObject[] offensiveSpawns;
 	public GameObject[] guardSpawns;
 	public Pickup[] pickups;
-	
+	public NavMeshSurface navMesh;
 }
 
 [System.Serializable]

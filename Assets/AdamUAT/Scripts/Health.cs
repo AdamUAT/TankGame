@@ -38,12 +38,24 @@ public class Health : MonoBehaviour
     public void Die(Pawn source)
     {
         AIController controller = GetComponent<AIController>();
-        if(controller != null)
+        if (controller != null)
         {
             GameManager.instance.npcs.Remove(controller);
         }
+        else
+        {
+            foreach(PlayerController playerController in GameManager.instance.players)
+            {
+                if(playerController.pawn.gameObject == this.gameObject)
+                {
+                    playerController.pawn = null;
+                    break;
+                }
+            }
+            GameManager.instance.RespawnPlayer();
+        }
+
         Destroy(gameObject);
 
-        GameManager.instance.RespawnPlayer();
     }
 }

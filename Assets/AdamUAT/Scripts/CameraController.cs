@@ -34,4 +34,9 @@ public class CameraController : MonoBehaviour
             camera.transform.eulerAngles = new Vector3(45, cameraPosition.transform.eulerAngles.y, cameraPosition.transform.eulerAngles.z); //Sets the camera so it matches the global rotation of the player, with it looking down a little.
         }
     }
+
+    public void OnDestroy()
+    {
+        Destroy(camera);
+    }
 }
