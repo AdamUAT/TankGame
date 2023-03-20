@@ -174,7 +174,7 @@ public class OffensiveAIController : AIController
     /// </summary>
     /// <param name="limit">The number of times it will check to see if a position is valid.</param>
     /// <returns>Returns true if it found a valid position.</returns>
-    protected bool FindWanderTarget(int limit)
+    protected virtual bool FindWanderTarget(int limit)
     {
         for (int i = 0; i < limit; i++)
         {
