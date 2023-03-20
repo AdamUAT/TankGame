@@ -5,8 +5,7 @@ using UnityEngine;
 public class Pickup : MonoBehaviour
 {
     //The powerup this pickup gives
-    [SerializeField]
-    private Powerups.powerupList powerup = Powerups.powerupList.Empty; //Defaults to the empty powerup
+    public Powerups.powerupList powerup = Powerups.powerupList.Empty; //Defaults to the empty powerup
 
     [SerializeField]
     [Tooltip("The odds of each powerup being chosen to respawn during the game. The initial powerup is decided by the map generation.")]

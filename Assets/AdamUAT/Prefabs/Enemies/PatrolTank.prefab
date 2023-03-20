@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8247018581790550660}
   - component: {fileID: 649127946795721314}
   - component: {fileID: 2741284192895339010}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Opening
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 829264805091961527}
   - component: {fileID: 4447197210018194145}
   - component: {fileID: 1733265984554694722}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TurretBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -167,7 +167,7 @@ GameObject:
   - component: {fileID: 5764401902138925253}
   - component: {fileID: 2108380159421301054}
   - component: {fileID: 2466517156165760898}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -243,7 +243,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5892339854458231703}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -277,7 +277,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5892339854536126072}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -311,7 +311,7 @@ GameObject:
   - component: {fileID: 3542197075445634445}
   - component: {fileID: 4804332048057211166}
   - component: {fileID: 5834970304193995524}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tracks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -387,7 +387,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7127710377163558088}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -419,15 +419,15 @@ GameObject:
   - component: {fileID: 5177126818534680166}
   - component: {fileID: 8179522848088298622}
   - component: {fileID: 8179522848088298623}
-  - component: {fileID: 8179522848088298617}
   - component: {fileID: 8179522848088298616}
   - component: {fileID: 8179522848088298619}
   - component: {fileID: 8179522848088298618}
   - component: {fileID: 8179522848088298620}
   - component: {fileID: -6681161310215280774}
   - component: {fileID: 3993183244744192173}
-  m_Layer: 0
-  m_Name: EnemyTank
+  - component: {fileID: -9074950213287781320}
+  m_Layer: 8
+  m_Name: PatrolTank
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -477,64 +477,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.2, y: 1.9462018, z: 3}
   m_Center: {x: 0, y: 1.0268991, z: 0}
---- !u!114 &8179522848088298617
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8179522848088298613}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58db2f207c3c40b49bb473ff55aac664, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pawn: {fileID: 8179522848088298622}
-  currentState: 0
-  target: {fileID: 0}
-  sightCacheDelay: 0.25
-  hearingRange: 20
-  bodyFieldOfView: 45
-  turretFieldOfView: 60
-  eyesight: 15
-  navMesh: {fileID: 0}
-  debugMode: 0
-  wanderRadiusMax: 30
-  wanderRadiusMin: 15
-  searchDelay: 5
-  followDistance: 5
-  shootFOV: 5
-  currentLookState: 0
-  lookStateWeights:
-  - 0.5
-  - 1.25
-  - 2.5
-  - 0.5
-  - 1
-  - 1
-  minLookTime: 5
-  maxLookTime: 15
-  slowTurretMoveSpeed: 33
-  normalTurretMoveSpeed: 45
-  fastTurretMoveSpeed: 90
-  narrowDeltaAngle: 33
-  casualDeltaAngle: 66
-  paranoidExclusionAngle: 45
-  paranoidDeltaAngle: 10
-  paranoidDeltaPeriod: 1
-  sideSideAngle: 90
-  sideDeltaAngle: 66
-  backDeltaAngle: 66
-  minNarrowAngleDuration: 0.25
-  maxNarrowAngleDuration: 1
-  minCasualAngleDuration: 0.25
-  maxCasualAngleDuration: 1
-  minParanoidAngleDuration: 0.5
-  maxParanoidAngleDuration: 1.25
-  minSideAngleDuration: 0.25
-  maxSideAngleDuration: 1
-  minBackAngleDuration: 0.25
-  maxBackAngleDuration: 1
 --- !u!114 &8179522848088298616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -640,6 +582,64 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e87235cdba0c84448f8dbdee8104961, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-9074950213287781320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8179522848088298613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d891d4d374bfc2d4493b6f89a4f3435f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pawn: {fileID: 8179522848088298622}
+  currentState: 0
+  target: {fileID: 0}
+  sightCacheDelay: 0.25
+  hearingRange: 20
+  bodyFieldOfView: 45
+  turretFieldOfView: 60
+  eyesight: 15
+  fleeThreshold: 0.5
+  searchDelay: 5
+  followDistance: 5
+  shootFOV: 5
+  debugMode: 0
+  currentLookState: 0
+  lookStateWeights:
+  - 0.5
+  - 1.25
+  - 2.5
+  - 0.5
+  - 1
+  - 1
+  minLookTime: 5
+  maxLookTime: 15
+  slowTurretMoveSpeed: 33
+  normalTurretMoveSpeed: 45
+  fastTurretMoveSpeed: 180
+  narrowDeltaAngle: 33
+  casualDeltaAngle: 66
+  paranoidExclusionAngle: 45
+  paranoidDeltaAngle: 10
+  paranoidDeltaPeriod: 1
+  sideSideAngle: 90
+  sideDeltaAngle: 66
+  backDeltaAngle: 66
+  minNarrowAngleDuration: 0.25
+  maxNarrowAngleDuration: 1
+  minCasualAngleDuration: 0.25
+  maxCasualAngleDuration: 1
+  minParanoidAngleDuration: 0.5
+  maxParanoidAngleDuration: 1.25
+  minSideAngleDuration: 0.25
+  maxSideAngleDuration: 1
+  minBackAngleDuration: 0.25
+  maxBackAngleDuration: 1
+  waypoints: []
+  currentWaypointTarget: 0
 --- !u!1 &9077522143115071654
 GameObject:
   m_ObjectHideFlags: 0
@@ -651,7 +651,7 @@ GameObject:
   - component: {fileID: 8522555350238928076}
   - component: {fileID: 3989720433913492499}
   - component: {fileID: 7505131937807865920}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
