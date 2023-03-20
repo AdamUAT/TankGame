@@ -18,7 +18,7 @@ public class CameraController : MonoBehaviour
     }
 
     //This update is only for cameras, as it helps stop making things jittery.
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         UpdateCameraPosition();
     }
