@@ -196,7 +196,6 @@ MonoBehaviour:
     type: 3}
   tankPawnPrefab: {fileID: 6834225977138675423, guid: 1631f38664453f34595e10f3d61649a1,
     type: 3}
-  playerSpawnTransform: {fileID: 1213014757}
 --- !u!4 &992228822
 Transform:
   m_ObjectHideFlags: 0
@@ -281,6 +280,7 @@ MonoBehaviour:
     weight: 1
   gridSize: {x: 3, y: 3}
   roomDimensions: {x: 40, y: 40}
+  isSeedByDay: 0
 --- !u!4 &1711873365
 Transform:
   m_ObjectHideFlags: 0

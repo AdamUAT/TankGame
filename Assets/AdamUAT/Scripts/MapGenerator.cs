@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,9 +18,31 @@ public class MapGenerator : MonoBehaviour
     [Tooltip("The size of each room. This determines how far away the rooms are placed.")]
     private Vector2 roomDimensions;
 
+    [Tooltip("If checked, then the map will generate the exact same for the entire day.")]
+    public bool isSeedByDay = false;
+
+    [Tooltip("If checked, then the seed will not be randomized during runime, allowing the designer to set the seed. isSeedByDay overrules this.")]
+    public bool isCustomSeed = false;
+
+    public int seed;
+
     // Start is called before the first frame update
     void Start()
     {
+        if(isSeedByDay)
+        {
+            UnityEngine.Random.InitState(DateTime.Now.DayOfYear * DateTime.Now.Year); //This makes it so each day has the same seed.
+        }
+        else if(isCustomSeed)
+        {
+            UnityEngine.Random.InitState(seed);
+        }
+        else
+        {
+            //If the designer wants Unity to seed it itself, still show the designer what the seed was.
+            seed = UnityEngine.Random.seed;
+        }
+
         GenerateMap();
     }
 
@@ -35,7 +58,7 @@ public class MapGenerator : MonoBehaviour
             for (int j = 0; j < gridSize.x; j++)
             {
                 // Create a new grid at the appropriate location.
-                GameObject roomObj = Instantiate(RandomRoom(), new Vector3(roomDimensions.x * j, 0, roomDimensions.y * i), Quaternion.identity);
+                GameObject roomObj = Instantiate(RandomRoomWeighted(), new Vector3(roomDimensions.x * j, 0, roomDimensions.y * i), Quaternion.identity);
 
                 // Make the room a child of the map GameObject.
                 roomObj.transform.parent = this.transform;
@@ -61,14 +84,28 @@ public class MapGenerator : MonoBehaviour
             }
         }
 
-        //
+        GameManager.instance.SpawnPlayer();
+    }
+
+    /// <summary>
+    /// Finds a random room in the scene.
+    /// </summary>
+    /// <returns>A reference to a room on the map.</returns>
+    public Room RandomRoom()
+    {
+        return (roomGrid[UnityEngine.Random.Range(0, gridSize.x), UnityEngine.Random.Range(0, gridSize.y)]);
+    }
+
+    private void SpawnPlayer()
+    {
+
     }
 
     /// <summary>
     /// Finds a weighted random room from the array of prefabs.
     /// </summary>
     /// <returns>A prefab reference to the chosen room.</returns>
-    private GameObject RandomRoom()
+    private GameObject RandomRoomWeighted()
     {
         //Gets the total weight values for the powerups.
         float totalWeight = 0;
@@ -78,7 +115,7 @@ public class MapGenerator : MonoBehaviour
         }
 
         //Chooses a random float in the range of the weights
-        float random = Random.Range(0, totalWeight);
+        float random = UnityEngine.Random.Range(0, totalWeight);
 
         //Checks to see which state fits the random number chosen.
         float weightIncrement = 0;

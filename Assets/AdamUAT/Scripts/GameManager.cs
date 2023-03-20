@@ -26,8 +26,6 @@ public class GameManager : MonoBehaviour
     private GameObject playerControllerPrefab;
     [SerializeField]
     private GameObject tankPawnPrefab;
-    [SerializeField]
-    private Transform playerSpawnTransform;
     #endregion
 
     void Awake()
@@ -41,8 +39,6 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        SpawnPlayer(); //SpawnPlayer needs to be first thing so other scripts can access it.
     }
 
     /// <summary>
@@ -51,7 +47,7 @@ public class GameManager : MonoBehaviour
     public void SpawnPlayer()
     {
         GameObject newPlayerObj = Instantiate(playerControllerPrefab, Vector3.zero, Quaternion.identity);
-        GameObject newPawnObj = Instantiate(tankPawnPrefab, playerSpawnTransform.position, playerSpawnTransform.rotation);
+        GameObject newPawnObj = Instantiate(tankPawnPrefab, FindObjectOfType<MapGenerator>().RandomRoom().playerSpawn.transform.position, Quaternion.identity);
 
         PlayerController newController = newPlayerObj.GetComponent<PlayerController>();
         TankPawn newPawn = newPawnObj.GetComponent<TankPawn>();
@@ -60,5 +56,26 @@ public class GameManager : MonoBehaviour
 
         //Add the spawned player to the variable so it can be accessed from anywhere. 
         players.Add(newController);
+    }
+
+    /// <summary>
+    /// The function to respawn the player after it died. It does not spawn another controller.
+    /// </summary>
+    public void RespawnPlayer()
+    {
+        GameObject newPawnObj = Instantiate(tankPawnPrefab, FindObjectOfType<MapGenerator>().RandomRoom().playerSpawn.transform.position, Quaternion.identity);
+        TankPawn newPawn = newPawnObj.GetComponent<TankPawn>();
+
+        //Finds which controller is missing a pawn and assign it the new pawn.
+        foreach(PlayerController playerController in players)
+        {
+            if(playerController.pawn == null)
+            {
+                if (newPawn != null)
+                    playerController.pawn = newPawn;
+                else
+                    Debug.Log("The TankPawn prefab is missing it's TankPawn script!");
+            }
+        }
     }
 }

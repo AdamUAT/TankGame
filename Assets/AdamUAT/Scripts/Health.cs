@@ -43,5 +43,7 @@ public class Health : MonoBehaviour
             GameManager.instance.npcs.Remove(controller);
         }
         Destroy(gameObject);
+
+        GameManager.instance.RespawnPlayer();
     }
 }
