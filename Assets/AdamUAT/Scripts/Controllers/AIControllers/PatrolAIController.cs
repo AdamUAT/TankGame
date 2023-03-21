@@ -19,12 +19,6 @@ public class PatrolAIController : AIController
         ChangeState(AIState.Patrol);
     }
 
-    // Update is called once per frame
-    protected override void Update()
-    {
-        base.Update();
-    }
-
     public override void ChangeState(AIState newState)
     {
         //Calls the end states.
@@ -85,9 +79,6 @@ public class PatrolAIController : AIController
         {
             case AIState.Patrol:
                 DoPatrolState();
-                break;
-            case AIState.Scan:
-                DoScanState();
                 break;
             case AIState.Chase:
                 DoChaseState();
@@ -168,28 +159,38 @@ public class PatrolAIController : AIController
         }
     }
 
-    protected override void DoScanState()
+    protected override void DoFleeState()
     {
-        if (CanSee(target.GetComponent<TankMover>().turret))
+        if (pawn.health.currentHealth / pawn.health.maxHealth > fleeThreshold)
         {
-            ChangeState(AIState.Chase);
+            if (CanSeeNoFOV(target.GetComponent<TankMover>().turret)) //Checks to see if the player was chasing this pawn to the health pickup. If so, then it resumes the chase.
+            {
+                ChangeState(AIState.Chase);
+            }
+            else
+            {
+                ChangeState(AIState.Patrol);
+            }
+        }
+        else if (Vector2.Distance(new Vector2(targetLocation.x, targetLocation.z), new Vector2(transform.position.x, transform.position.z)) <= 0.1)
+        {
+            NavigateToClosestHealthPowerup(); //The health is still too low after getting a health pickup, then it navigates to the next one.
         }
 
-        if (Time.time >= lastStateChangeTime + 8.0f)
+        //If the player is chasing the tank while fleeing, the tank will still shoot back.
+        if (CanSeeNoFOV(target.GetComponent<TankMover>().turret))
         {
-            ChangeState(AIState.Patrol);
-        }
-        else if (Time.time <= lastStateChangeTime + 8.0f && Time.time >= lastStateChangeTime + 7.0f)
-        {
-            pawn.mover.TurretRotate(90); //Returns turret to front position.
-        }
-        else if (Time.time <= lastStateChangeTime + 6.0f && Time.time >= lastStateChangeTime + 4.0f)
-        {
-            pawn.mover.TurretRotate(-90);
-        }
-        else if (Time.time <= lastStateChangeTime + 2.0f && Time.time >= lastStateChangeTime + 1.0f)
-        {
-            pawn.mover.TurretRotate(90);
+            pawn.mover.TurretRotateTowards(target.transform.position, fastTurretMoveSpeed);
+
+            //If the tank is looking at the tank, then it will shoot the tank.
+            Vector3 aiToTarget = target.transform.position - pawn.mover.turret.transform.position;
+            //Makes it so the angle is 2d.
+            float angleToTargetFromTurret = Vector2.Angle(new Vector2(aiToTarget.x, aiToTarget.z), new Vector2(pawn.mover.turret.transform.forward.x, pawn.mover.turret.transform.forward.z)); //Need to have the turret angle seperate from the body, otherwise stuff gets weird.
+            //Allows a 5 degree margin
+            if (Mathf.Abs(angleToTargetFromTurret) <= shootFOV)
+            {
+                pawn.shooter.Shoot();
+            }
         }
     }
 }

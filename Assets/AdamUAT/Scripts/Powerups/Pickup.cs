@@ -11,9 +11,8 @@ public class Pickup : MonoBehaviour
     [Tooltip("The odds of each powerup being chosen to respawn during the game. The initial powerup is decided by the map generation.")]
     private float[] powerupWeights; //This must be manually set in the prefab, it also must have the same size as the enum.
 
-    [SerializeField]
     [Tooltip("Tells if the pickup has a powerup ready to be collected")]
-    private bool isCollectable;
+    public bool isCollectable;
 
     [SerializeField]
     private GameObject powerupMesh;

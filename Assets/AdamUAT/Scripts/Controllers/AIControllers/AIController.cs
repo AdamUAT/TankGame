@@ -286,17 +286,17 @@ public class AIController : Controller
     /// <summary>
     /// Manages when the tank should leave the flee state.
     /// </summary>
-    protected void DoFleeState()
+    protected virtual void DoFleeState()
     {
         if (pawn.health.currentHealth / pawn.health.maxHealth > fleeThreshold)
         {
             if (CanSeeNoFOV(target.GetComponent<TankMover>().turret)) //Checks to see if the player was chasing this pawn to the health pickup. If so, then it resumes the chase.
             {
-                currentState = AIState.Chase;
+                ChangeState(AIState.Chase);
             }
             else
             {
-                currentState = AIState.Scan;
+                ChangeState(AIState.Scan);
             }
         }
         else if (Vector2.Distance(new Vector2(targetLocation.x, targetLocation.z), new Vector2(transform.position.x, transform.position.z)) <= 0.1)
@@ -556,7 +556,7 @@ public class AIController : Controller
             foreach (Pickup pickup in GameManager.instance.pickups)
             {
                 float tempDistance = Vector3.Distance(pickup.transform.position, pawn.transform.position);
-                if (tempDistance < closestDistance && pickup.powerup == Powerups.powerupList.Health)
+                if (tempDistance < closestDistance && pickup.powerup == Powerups.powerupList.Health && pickup.isCollectable)
                 {
                     closestPickup = pickup;
                     closestDistance = tempDistance;
