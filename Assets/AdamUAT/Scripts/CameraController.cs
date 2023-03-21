@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class CameraController : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class CameraController : MonoBehaviour
     private GameObject cameraPosition;
     [SerializeField]
     private float cameraLerpSpeed = 0.3f;
+    [SerializeField]
+    private float cameraRotationSpeed = 30;
 
     private void Start()
     {
@@ -18,7 +21,7 @@ public class CameraController : MonoBehaviour
     }
 
     //This update is only for cameras, as it helps stop making things jittery.
-    private void FixedUpdate()
+    private void LateUpdate()
     {
         UpdateCameraPosition();
     }
@@ -31,7 +34,8 @@ public class CameraController : MonoBehaviour
         if (camera != null)
         {
             camera.transform.position = Vector3.Lerp(camera.transform.position, cameraPosition.transform.position, cameraLerpSpeed); //Smooth sets the camera to be behind the player by moving it 30% closer to the player each tick, so 1st tick its 30%, 2nd is 48, 3rd is 63.6%, 4th is 74.25%, etc.
-            camera.transform.eulerAngles = new Vector3(45, cameraPosition.transform.eulerAngles.y, cameraPosition.transform.eulerAngles.z); //Sets the camera so it matches the global rotation of the player, with it looking down a little.
+            //camera.transform.eulerAngles = new Vector3(45, cameraPosition.transform.eulerAngles.y, cameraPosition.transform.eulerAngles.z); //Sets the camera so it matches the global rotation of the player, with it looking down a little.
+            camera.transform.rotation = Quaternion.RotateTowards(camera.transform.rotation, cameraPosition.transform.rotation, cameraRotationSpeed * Time.deltaTime);
         }
     }
 
