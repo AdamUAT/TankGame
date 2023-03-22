@@ -193,4 +193,28 @@ public class PatrolAIController : AIController
             }
         }
     }
+
+    protected override void DoSearchState()
+    {
+        if (CanSee(target.GetComponent<TankMover>().turret))
+        {
+            ChangeState(AIState.Chase);
+        }
+
+        //Moves the enemy to the last known location of the player.
+        Seek(lastTargetLocation);
+
+        //Keep the turret pointed towards the destination.
+        pawn.mover.TurretRotateTowards(lastTargetLocation, fastTurretMoveSpeed);
+
+        //This should make sure enough time has passed that the frames have calculated enough for IsMoving to actually return a real result.
+        if (Time.time >= lastStateChangeTime + 0.1)
+        {
+            //After the enemy arrived at the point, it looks around for the player. If it doesn't find it, then it starts to wander agian.
+            if (!pawn.mover.IsMoving())
+            {
+                ChangeState(AIState.Patrol);
+            }
+        }
+    }
 }

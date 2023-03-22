@@ -83,7 +83,7 @@ public class MapGenerator : MonoBehaviour
                 // Get the room object
                 Room room = roomObj.GetComponent<Room>();
 
-                //Open doors in the room.
+                //Close doors in the room.
                 if (j == 0)
                     room.doorWest.SetActive(true);
                 else if(j == gridSize.x - 1)
