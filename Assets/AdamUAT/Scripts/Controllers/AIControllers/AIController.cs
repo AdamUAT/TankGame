@@ -251,7 +251,7 @@ public class AIController : Controller
         }
     }
 
-    protected void DoSearchState()
+    protected virtual void DoSearchState()
     {
         if (CanSee(target.GetComponent<TankMover>().turret))
         {
