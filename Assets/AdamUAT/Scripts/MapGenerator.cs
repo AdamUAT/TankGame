@@ -43,6 +43,10 @@ public class MapGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        isSeedByDay = GameManager.instance.isDaySeed;
+        isCustomSeed = !GameManager.instance.isRandomSeed;
+        seed = GameManager.instance.customSeed;
+
         if(isSeedByDay)
         {
             UnityEngine.Random.InitState(DateTime.Now.DayOfYear * DateTime.Now.Year); //This makes it so each day has the same seed.
@@ -56,6 +60,9 @@ public class MapGenerator : MonoBehaviour
             //If the designer wants Unity to seed it itself, still show the designer what the seed was.
             seed = UnityEngine.Random.seed;
         }
+
+        gridSize.x = GameManager.instance.mapColumns;
+        gridSize.y = GameManager.instance.mapRows;
 
         GenerateMap();
     }

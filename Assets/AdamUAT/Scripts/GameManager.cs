@@ -14,6 +14,10 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public static GameManager instance;
 
+    public enum GameState { TitleScreen, MainMenu, Options, PlayerCount, MapSettings, HostOrJoin, Host, Join, Lobby, GamePlay, GameOver, Credits, Pause }
+    GameState gameState;
+    public List<GameObject> canvases;
+
     // List that holds our player(s)
     public List<PlayerController> players;
     //All the entities that are not players.
@@ -34,6 +38,7 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+            gameState = GameState.TitleScreen;
         }
         else
         {
@@ -89,4 +94,41 @@ public class GameManager : MonoBehaviour
         }
 
     }
+
+    #region GameState functions
+    /// <summary>
+    /// Activates and Deactivates UI canvases based on which state is changing.
+    /// </summary>
+    /// <param name="newState"></param>
+    public void GameStateChange(GameState newState)
+    {
+        foreach(GameObject canvas in canvases)
+        {
+            UI_Object ui = canvas.GetComponent<UI_Object>();
+            if(ui != null)
+            {
+                if(ui.typeUI == gameState)
+                {
+                    canvas.SetActive(false);
+                }
+                if(ui.typeUI == newState)
+                {
+                    canvas.SetActive(true);
+                }
+            }
+        }
+        gameState = newState;
+    }
+
+    [HideInInspector]
+    public int mapRows = 1;
+    [HideInInspector]
+    public int mapColumns = 1;
+    [HideInInspector]
+    public bool isRandomSeed = true;
+    [HideInInspector]
+    public bool isDaySeed = false;
+    [HideInInspector]
+    public int customSeed = 0;
+    #endregion GameState functions
 }
