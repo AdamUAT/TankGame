@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/AdamUAT/Scenes/MainMenu.unity
+    guid: b92ea958dfedc414c8105563442fe7d6
+  - enabled: 1
+    path: Assets/AdamUAT/Scenes/MapTest.unity
+    guid: ed21dc890ce59c14e9fe6c698b6cf664
   m_configObjects: {}
