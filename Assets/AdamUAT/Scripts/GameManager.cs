@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Audio;
 
 /// <summary>
 /// The GameManager.
@@ -34,7 +36,7 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
@@ -73,9 +75,9 @@ public class GameManager : MonoBehaviour
         TankPawn newPawn = newPawnObj.GetComponent<TankPawn>();
 
         //Finds which controller is missing a pawn and assign it the new pawn.
-        foreach(PlayerController playerController in players)
+        foreach (PlayerController playerController in players)
         {
-            if(playerController.pawn == null)
+            if (playerController.pawn == null)
             {
                 if (newPawn != null)
                 {
@@ -102,21 +104,22 @@ public class GameManager : MonoBehaviour
     /// <param name="newState"></param>
     public void GameStateChange(GameState newState)
     {
-        foreach(GameObject canvas in canvases)
+        foreach (GameObject canvas in canvases)
         {
             UI_Object ui = canvas.GetComponent<UI_Object>();
-            if(ui != null)
+            if (ui != null)
             {
-                if(ui.typeUI == gameState)
+                if (ui.typeUI == gameState)
                 {
                     canvas.SetActive(false);
                 }
-                if(ui.typeUI == newState)
+                if (ui.typeUI == newState)
                 {
                     canvas.SetActive(true);
                 }
             }
         }
+
         gameState = newState;
     }
 
@@ -130,5 +133,60 @@ public class GameManager : MonoBehaviour
     public bool isDaySeed = false;
     [HideInInspector]
     public int customSeed = 0;
+    [SerializeField]
+    private AudioSource soundtrackAudioSource;
+    [SerializeField]
+    private AudioSource uiAudioSource;
+    [SerializeField]
+    private AudioClip mainMenu;
+    [SerializeField]
+    private AudioClip gamePlay;
+    [SerializeField]
+    private AudioClip uiSoundEffect;
+    [SerializeField]
+    private AudioMixer audioMixer;
+
+    public enum BackgroundMusicGroups { MainMenu, Gameplay }
+    public void ChangeBackgroundMusic(BackgroundMusicGroups group)
+    {
+        switch (group)
+        {
+            case BackgroundMusicGroups.MainMenu:
+                soundtrackAudioSource.clip = mainMenu;
+                soundtrackAudioSource.Play();
+                break;
+            case BackgroundMusicGroups.Gameplay:
+                soundtrackAudioSource.clip = gamePlay;
+                soundtrackAudioSource.Play();
+                break;
+            default:
+                Debug.LogWarning("Music enum went out of scope in GameManager.");
+                break;
+        }
+    }
+
+    public void PlayUISoundEffect()
+    {
+        uiAudioSource.PlayOneShot(uiSoundEffect);
+    }
+
+    public void AdjustVolumeMix(string groupVolumeName, float newVolume)
+    {
+        //Cap the minimum at 0
+        if(newVolume <= 0)
+        {
+            newVolume = -80;
+        }
+        else
+        {
+            newVolume = Mathf.Log10(newVolume);
+            newVolume = newVolume * 20;
+        }
+
+        Debug.Log(newVolume);
+
+        //Set the group's volume.
+        audioMixer.SetFloat(groupVolumeName, newVolume);
+    }
     #endregion GameState functions
 }

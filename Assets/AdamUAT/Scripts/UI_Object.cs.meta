@@ -3,7 +3,11 @@ guid: c80d16166834cb14cac64393c94d584b
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - columns: {instanceID: 0}
+  - rows: {instanceID: 0}
+  - seed: {instanceID: 0}
+  - uiSoundEffect: {fileID: 8300000, guid: 09a7fb2327c67ea4bbd2ca3d43331d55, type: 3}
   executionOrder: -3
   icon: {instanceID: 0}
   userData: 
