@@ -15,14 +15,16 @@ public class TankShooter : Shooter
     [SerializeField]
     protected float shellLifespan;
     [SerializeField]
+    private AudioClip tankFire;
+    [SerializeField]
     [Tooltip("Should the delay be in shots per second or seconds of delay?")]
-    private bool isDelayReload = true;
+    protected bool isDelayReload = true;
     [SerializeField]
     [Tooltip("The delay between each shot, in seconds.")]
-    private float fireRateDelay = 1;
+    protected float fireRateDelay = 1;
     [SerializeField]
     [Tooltip("How many times the tank can fire in 1 second.")]
-    private float fireRate = 1;
+    protected float fireRate = 1;
 
     private float reloadCountdown;
     protected bool canFire;
@@ -40,7 +42,7 @@ public class TankShooter : Shooter
     /// <summary>
     /// Allows the tank to fire again and calls any methods that happen from that as well.
     /// </summary>
-    private void Reload()
+    protected virtual void Reload()
     {
         canFire = true;
         //Put anything here that happens when the player can fire again, such as a sound effect.
@@ -68,6 +70,12 @@ public class TankShooter : Shooter
                     reloadCountdown = 1 / fireRate;
                 else
                     Debug.LogWarning("Custom Error: FireRate cannot be 0.");
+            }
+
+            AudioSource audioSource = GetComponent<AudioSource>();
+            if(audioSource != null)
+            {
+                audioSource.PlayOneShot(tankFire, 7.5f);
             }
 
             LaunchBullet();

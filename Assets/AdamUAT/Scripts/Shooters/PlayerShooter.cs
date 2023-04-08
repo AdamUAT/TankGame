@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class PlayerShooter : TankShooter
 {
+    [SerializeField]
+    private AudioClip reload;
+    [SerializeField]
+    private AudioClip misfire;
+
    /// <summary>
    /// Instantiates and applies force to a projectile. Also triggers all enemies to potentially hear the player.
    /// </summary>
@@ -36,4 +41,38 @@ public class PlayerShooter : TankShooter
             enemy.HeardPlayerShoot(gameObject.transform.position);
         }
     }
+
+    /// <summary>
+    /// Tells the player they can fire again.
+    /// </summary>
+    protected override void Reload()
+    {
+        base.Reload();
+
+        AudioSource audioSource = GetComponent<AudioSource>();
+        if(audioSource != null)
+        {
+            audioSource.PlayOneShot(reload);
+        }
+    }
+
+    /// <summary>
+    /// If the player can't shoot yet, it playes a click sound.
+    /// </summary>
+    public override void Shoot()
+    {
+        if (canFire)
+        {
+            base.Shoot();
+        }
+        else
+        {
+            AudioSource audioSource = GetComponent<AudioSource>();
+            if (audioSource != null)
+            {
+                audioSource.PlayOneShot(misfire);
+            }
+        }
+    }
+
 }

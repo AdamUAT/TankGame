@@ -116,6 +116,7 @@ public class UI_Object : MonoBehaviour
 
         SceneManager.LoadScene("MapTest");
         GameManager.instance.GameStateChange(GameManager.GameState.GamePlay);
+        GameManager.instance.ChangeBackgroundMusic(GameManager.BackgroundMusicGroups.Gameplay);
     }
 
     public void ToggleRandomSeed()
@@ -125,5 +126,19 @@ public class UI_Object : MonoBehaviour
     public void ToggleDaySeed()
     {
         GameManager.instance.isDaySeed = !GameManager.instance.isDaySeed;
+    }
+
+    public void PlayUISound()
+    {
+        GameManager.instance.PlayUISoundEffect();
+    }
+
+    public void AdjustSoundtrackVolume(Slider slider)
+    {
+        GameManager.instance.AdjustVolumeMix("SoundtrackVolume", slider.value);
+    }
+    public void AdjustEffectsVolume(Slider slider)
+    {
+        GameManager.instance.AdjustVolumeMix("EffectsVolume", slider.value);
     }
 }
