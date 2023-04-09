@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     public enum GameState { TitleScreen, MainMenu, Options, PlayerCount, MapSettings, HostOrJoin, Host, Join, Lobby, GamePlay, GameOver, Credits, Pause }
-    GameState gameState;
+    public GameState gameState;
     public List<GameObject> canvases;
 
     // List that holds our player(s)

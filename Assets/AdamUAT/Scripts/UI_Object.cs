@@ -15,6 +15,10 @@ public class UI_Object : MonoBehaviour
     private TMP_InputField rows; 
     [SerializeField]
     private TMP_InputField seed;
+    [SerializeField]
+    private List<RawImage> lives;
+    [SerializeField]
+    private Slider healthBar;
 
     void Start()
     {
@@ -39,6 +43,16 @@ public class UI_Object : MonoBehaviour
     {
         GameManager.instance.GameStateChange(GameManager.GameState.MainMenu);
     }
+
+    public void OptionsToPause()
+    {
+        GameManager.instance.GameStateChange(GameManager.GameState.Pause);
+    }
+    public void PauseToOptions()
+    {
+        GameManager.instance.GameStateChange(GameManager.GameState.Options);
+    }
+
     public void MainMenuToCredits()
     {
         GameManager.instance.GameStateChange(GameManager.GameState.Credits);
@@ -140,5 +154,42 @@ public class UI_Object : MonoBehaviour
     public void AdjustEffectsVolume(Slider slider)
     {
         GameManager.instance.AdjustVolumeMix("EffectsVolume", slider.value);
+    }
+
+    public void PauseToGamePlay()
+    {
+        GameManager.instance.GameStateChange(GameManager.GameState.GamePlay);
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+    public void PauseToMainMenu()
+    {
+        GameManager.instance.GameStateChange(GameManager.GameState.MainMenu);
+        SceneManager.LoadScene("MainMenu");
+        GameManager.instance.ChangeBackgroundMusic(GameManager.BackgroundMusicGroups.MainMenu);
+    }
+    
+    public void UpdateLifeDisplay(int livesRemaining)
+    {
+        if(lives.Count > 0)
+        {
+            //Sets all to inactive.
+            foreach(RawImage life in lives)
+            {
+                life.gameObject.SetActive(false);
+            }
+
+            //Sets the lives to active. The order in which the sprites are put into the list matters.
+            for(int i = 1; i <= livesRemaining; i++)
+            {
+                lives[i].gameObject.SetActive(true);
+            }
+        }
+    }
+
+    public void UpdateHealthBar(float percentHealth)
+    {
+        healthBar.value = percentHealth;
     }
 }

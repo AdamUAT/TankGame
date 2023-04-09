@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using JetBrains.Annotations;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,12 +10,18 @@ public class PlayerController : Controller
     public KeyCode rotateClockwiseKey;
     public KeyCode rotateCounterClockwiseKey;
     public KeyCode shootKey;
+    public KeyCode pauseKey;
+
+    //Lives is stored in the playerController because it is not deleted on the pawn's death.
+    public int lives;
 
     private void Start()
     {
         //Hides and locks the cursor.
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        lives = 3;
     }
 
     private void Update()
@@ -38,36 +45,57 @@ public class PlayerController : Controller
     /// </summary>
     public void ProcessInputs()
     {
-        if (pawn.mover != null)
+        if (GameManager.instance.gameState == GameManager.GameState.GamePlay)
         {
-            if (Input.GetKey(rotateClockwiseKey))
+            if (pawn.mover != null)
             {
-                pawn.mover.BodyRotate(true);
-            }
+                if (Input.GetKey(rotateClockwiseKey))
+                {
+                    pawn.mover.BodyRotate(true);
+                }
 
-            if (Input.GetKey(rotateCounterClockwiseKey))
-            {
-                pawn.mover.BodyRotate(false);
-            }
+                if (Input.GetKey(rotateCounterClockwiseKey))
+                {
+                    pawn.mover.BodyRotate(false);
+                }
 
-            if (Input.GetKeyDown(shootKey))
-            {
-                pawn.shooter.Shoot();
-            }
+                if (Input.GetKeyDown(shootKey))
+                {
+                    pawn.shooter.Shoot();
+                }
 
-            if (Input.GetKey(moveForwardKey))
-            {
-                pawn.mover.Move(true); ;
-            }
+                if (Input.GetKey(moveForwardKey))
+                {
+                    pawn.mover.Move(true); ;
+                }
 
-            if (Input.GetKey(moveBackwardKey))
+                if (Input.GetKey(moveBackwardKey))
+                {
+                    pawn.mover.Move(false);
+                }
+
+                if (Input.GetKeyDown(pauseKey))
+                {
+                    GameManager.instance.GameStateChange(GameManager.GameState.Pause);
+
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.visible = true;
+                }
+            }
+            else
             {
-                pawn.mover.Move(false);
+                Debug.LogWarning("Custom Warning: No Mover component found in TankPawn");
             }
         }
-        else
+        else if (GameManager.instance.gameState == GameManager.GameState.Pause)
         {
-            Debug.LogWarning("Custom Warning: No Mover component found in TankPawn");
+            if (Input.GetKeyDown(pauseKey))
+            {
+                GameManager.instance.GameStateChange(GameManager.GameState.GamePlay);
+
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
         }
     }
 }
