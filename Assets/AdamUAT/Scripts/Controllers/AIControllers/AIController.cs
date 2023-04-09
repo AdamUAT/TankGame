@@ -46,6 +46,9 @@ public class AIController : Controller
     [Tooltip("Begins showing debug gizmos for the AI")]
     protected bool debugMode = false;
 
+    [SerializeField]
+    private Canvas healthBar;
+
     #region Turret Movement
     //CANNOT change the int value of the enum, it would mess up how they are assigned.
     protected enum lookState { straight, narrow, casual, paranoid, back, side }
@@ -142,6 +145,9 @@ public class AIController : Controller
     protected virtual void Update()
     {
         MakeDecisions();
+
+        Camera camera = Camera.main;
+        healthBar.transform.LookAt(camera.transform.position);
     }
 
     public virtual void MakeDecisions()

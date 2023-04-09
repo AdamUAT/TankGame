@@ -17,7 +17,11 @@ public class PlayerMover : TankMover
 
     private void Update()
     {
-        //Rotates the turret by the mouse's input.
-        TurretRotate(Input.GetAxis("Mouse X") * lookSensitivity);
+        //Only moves the camera if the gameState is when the player is controlling a tank.
+        if (GameManager.instance.gameState == GameManager.GameState.GamePlay)
+        {
+            //Rotates the turret by the mouse's input.
+            TurretRotate(Input.GetAxis("Mouse X") * lookSensitivity);
+        }
     }
 }
