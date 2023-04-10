@@ -21,6 +21,8 @@ public class UI_Object : MonoBehaviour
     private List<RawImage> lives;
     [SerializeField]
     private Slider healthBar;
+    [SerializeField]
+    private TextMeshProUGUI score;
 
     void Start()
     {
@@ -197,5 +199,10 @@ public class UI_Object : MonoBehaviour
     public void UpdateHealthBar(float percentHealth)
     {
         healthBar.value = percentHealth;
+    }
+
+    public void UpdateScore(long newScore)
+    {
+        score.text = newScore.ToString();
     }
 }

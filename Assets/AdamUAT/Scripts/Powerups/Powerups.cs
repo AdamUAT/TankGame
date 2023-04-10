@@ -9,7 +9,7 @@ public class Powerups : MonoBehaviour
     /// A list of every possible powerup.
     /// </summary>
     public static List<Powerup> powerups = new List<Powerup>(); //This is needed because the classes themselve's can't assign the material to itself.
-    public enum powerupList {Empty, Health, Speed, FireRate};
+    public enum powerupList {Empty, Health, Speed, FireRate, Score};
 
     #region PowerupMaterials
     [SerializeField]
@@ -20,6 +20,8 @@ public class Powerups : MonoBehaviour
     private Material speedPowerupMaterial;
     [SerializeField]
     private Material fireRatePowerupMaterial;
+    [SerializeField]
+    private Material scorePowerupMaterial;
     #endregion PowerupMaterials
 
     #region PowerupVariables
@@ -35,6 +37,9 @@ public class Powerups : MonoBehaviour
     [SerializeField]
     [Tooltip("The percentage of a fire rate boost that the powerup gives.")]
     private float fireRatePowerupAmount = 5;
+    [SerializeField]
+    [Tooltip("The amount of a score boost the powerup gives.")]
+    private long scorePowerupAmount = 10;
     #endregion PowerupVariables
 
     void Start()
@@ -69,6 +74,13 @@ public class Powerups : MonoBehaviour
             fireRatePowerup.fireRateIncrease = fireRatePowerupAmount;
             powerup.duration = -1;
             powerups.Add(fireRatePowerup);
+
+            ScorePowerup scorePowerup;
+            scorePowerup = new ScorePowerup();
+            scorePowerup.powerupMaterial = scorePowerupMaterial;
+            scorePowerup.scoreIncrease = scorePowerupAmount;
+            powerup.duration = -1;
+            powerups.Add(scorePowerup);
         }
     }
 }
@@ -139,6 +151,29 @@ public class FireRatePowerup : Powerup
         {
             //the delay between each shot is decreased
             pawn.shooter.FireRateBoost(fireRateIncrease);
+        }
+    }
+}
+
+public class ScorePowerup : Powerup
+{
+    public long scoreIncrease;
+
+    public override void Apply(PowerupManager target)
+    {
+        TankPawn pawn = target.GetComponent<TankPawn>();
+        if (pawn != null)
+        {
+            foreach(PlayerController playerController in GameManager.instance.players)
+            {
+                if(playerController.pawn = pawn)
+                {
+                    //Increase the score of the player.
+                    playerController.IncreaseScore(scoreIncrease);
+                }
+                
+            }
+            
         }
     }
 }

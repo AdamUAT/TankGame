@@ -393,6 +393,7 @@ MonoBehaviour:
   playerCount: {fileID: 0}
   lives: []
   healthBar: {fileID: 0}
+  score: {fileID: 0}
 --- !u!114 &8856489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -592,6 +593,7 @@ MonoBehaviour:
   playerCount: {fileID: 715027810}
   lives: []
   healthBar: {fileID: 0}
+  score: {fileID: 0}
 --- !u!114 &81631090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5520,6 +5522,7 @@ MonoBehaviour:
   playerCount: {fileID: 0}
   lives: []
   healthBar: {fileID: 0}
+  score: {fileID: 0}
 --- !u!114 &1397550531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7457,10 +7460,13 @@ MonoBehaviour:
     type: 2}
   fireRatePowerupMaterial: {fileID: 2100000, guid: 6bbef9af38a6bab4ea87a9f7ae86ee2f,
     type: 2}
+  scorePowerupMaterial: {fileID: 2100000, guid: e55e8d1b5c222d249a3f077898cf20d2,
+    type: 2}
   healthPowerupAmount: 20
   speedPowerupAmount: 0.5
   speedPowerupDuration: 5
   fireRatePowerupAmount: 0.15
+  scorePowerupAmount: 10
 --- !u!82 &1663306888
 AudioSource:
   m_ObjectHideFlags: 0
@@ -7776,6 +7782,7 @@ MonoBehaviour:
   playerCount: {fileID: 0}
   lives: []
   healthBar: {fileID: 0}
+  score: {fileID: 0}
 --- !u!1 &1726666973
 GameObject:
   m_ObjectHideFlags: 0
@@ -8528,6 +8535,7 @@ MonoBehaviour:
   playerCount: {fileID: 0}
   lives: []
   healthBar: {fileID: 0}
+  score: {fileID: 0}
 --- !u!114 &2011803713
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -61,11 +61,13 @@ public class GameManager : MonoBehaviour
 
         newController.pawn = newPawn;
 
+        newController.CreateHUD();
+
         //Add the spawned player to the variable so it can be accessed from anywhere. 
         players.Add(newController);
 
         //spawns the camera and caches it.
-        GameObject newCamera = newPawn.GetComponent<CameraController>().InstantiateCamera();
+        GameObject newCamera = newPawn.GetComponent<CameraController>().InstantiateCamera(newController);
 
 
 
@@ -88,13 +90,14 @@ public class GameManager : MonoBehaviour
             newController.rotateClockwiseKey = KeyCode.RightArrow;
             newController.rotateCounterClockwiseKey = KeyCode.LeftArrow;
             newController.shootKey = KeyCode.Mouse1;
-         
+
+            newController.CreateHUD();
 
             //Add the spawned player to the variable so it can be accessed from anywhere. 
             players.Add(newController);
 
             //Spawns the second camera and sets it for the right half of the screen.
-            newCamera = newPawn.GetComponent<CameraController>().InstantiateCamera();
+            newCamera = newPawn.GetComponent<CameraController>().InstantiateCamera(newController);
             cameraComponent = newCamera.GetComponent<Camera>();
             cameraComponent.rect = new Rect(0.5f, 0, 0.5f, 1);
 
@@ -120,6 +123,10 @@ public class GameManager : MonoBehaviour
                 if (newPawn != null)
                 {
                     playerController.pawn = newPawn;
+
+                    //Connects the new camera to the HUD
+                    Canvas hudCanvas = playerController.hud.GetComponent<Canvas>();
+                    hudCanvas.worldCamera = newCamera.GetComponent<Camera>();
                 }
                 else
                     Debug.Log("The TankPawn prefab is missing it's TankPawn script!");

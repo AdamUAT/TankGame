@@ -20,9 +20,25 @@ public class CameraController : MonoBehaviour
     {
     }
 
+    //This takes in a PlayerController input because we access the HUD from it.
+    public GameObject InstantiateCamera(PlayerController playerController)
+    {
+        camera = Instantiate(cameraPrefab, cameraPosition.transform.position, cameraPosition.transform.rotation); //Innitial spawn of the camera.
+
+        Canvas hudCanvas = playerController.hud.GetComponent<Canvas>();
+        hudCanvas.worldCamera = camera.GetComponent<Camera>();
+
+        //Makes sure that the UI is drawn in front of everything.
+        hudCanvas.planeDistance = 1;
+
+        return (camera);
+    }
+
+    //This is used by the respawn() function. It will connect the camera later.
     public GameObject InstantiateCamera()
     {
         camera = Instantiate(cameraPrefab, cameraPosition.transform.position, cameraPosition.transform.rotation); //Innitial spawn of the camera.
+
         return (camera);
     }
 

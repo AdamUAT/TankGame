@@ -18,6 +18,10 @@ public class Pickup : MonoBehaviour
     private GameObject powerupMesh;
     [SerializeField]
     private GameObject powerupParticles;
+    [SerializeField]
+    private AudioSource audioSource;
+    [SerializeField]
+    private AudioClip powerupFX;
 
     [SerializeField]
     [Tooltip("The delay, in seconds, of how long it takes this pickup to respawn a powerup.")]
@@ -51,6 +55,8 @@ public class Pickup : MonoBehaviour
             isCollectable = false;
 
             GameManager.instance.pickups.Remove(this);
+
+            audioSource.PlayOneShot(powerupFX);
         }
     }
 
