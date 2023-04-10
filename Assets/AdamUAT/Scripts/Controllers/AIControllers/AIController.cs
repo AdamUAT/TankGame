@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.GraphicsBuffer;
 
 public class AIController : Controller
 {
@@ -174,7 +175,7 @@ public class AIController : Controller
     /// </summary>
     protected virtual void DoScanState()
     {
-        if (CanSee(target.GetComponent<TankMover>().turret))
+        if (CanSeePlayer())
         {
             ChangeState(AIState.Chase);
         }
@@ -205,7 +206,7 @@ public class AIController : Controller
         {
             ChangeState(AIState.Flee);
         }
-        else if (CanSee(target.GetComponent<TankMover>().turret))
+        else if (CanSeePlayer())
         {
             lastStateChangeTime = Time.time; //Tells the timer when the last time the enemy saw the player was.
             if (DistanceFromTarget() > followDistance)
@@ -259,7 +260,7 @@ public class AIController : Controller
 
     protected virtual void DoSearchState()
     {
-        if (CanSee(target.GetComponent<TankMover>().turret))
+        if (CanSeePlayer())
         {
             ChangeState(AIState.Chase);
         }
@@ -296,7 +297,7 @@ public class AIController : Controller
     {
         if (pawn.health.currentHealth / pawn.health.maxHealth > fleeThreshold)
         {
-            if (CanSeeNoFOV(target.GetComponent<TankMover>().turret)) //Checks to see if the player was chasing this pawn to the health pickup. If so, then it resumes the chase.
+            if (CanSeePlayerNoFOV()) //Checks to see if the player was chasing this pawn to the health pickup. If so, then it resumes the chase.
             {
                 ChangeState(AIState.Chase);
             }
@@ -311,7 +312,7 @@ public class AIController : Controller
         }
 
         //If the player is chasing the tank while fleeing, the tank will still shoot back.
-        if (CanSeeNoFOV(target.GetComponent<TankMover>().turret))
+        if (CanSeePlayerNoFOV())
         {
             pawn.mover.TurretRotateTowards(target.transform.position, fastTurretMoveSpeed);
 
@@ -329,7 +330,7 @@ public class AIController : Controller
 
     protected virtual void DoAlertState()
     {
-        if (CanSee(target.GetComponent<TankMover>().turret))
+        if (CanSeePlayer())
         {
             ChangeState(AIState.Chase);
         }
@@ -595,7 +596,7 @@ public class AIController : Controller
     }
 
     /// <summary>
-    /// Checks to see if the AI controller is able to see its target.
+    /// Checks to see if the AI controller is able to see a specific target.
     /// </summary>
     /// <param name="_target">The GameObject this AI checks if it can see. If passing in the player, pass in the turret from the TankMover script, because the player's position is too low to the ground. </param>
     /// <returns>Returns true if the target is in the AI controller's field of view, or returns the output of the last time time this function was called if it was called less than sightCacheDelay seconds ago.</returns>
@@ -665,7 +666,7 @@ public class AIController : Controller
 
                 //If the raycast hits something, then check to see if it's the player.
                 //Returns true if the raycast hits a player.
-                if (Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget, out hit, eyesight, layerMask) && hit.transform.gameObject == target)
+                if (Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget, out hit, eyesight, layerMask) && hit.transform.gameObject.tag == "Player")
                 {
                     //If it didn't hit a wall, then there must be line of sight for the player.
                     sightCache = true;
@@ -681,8 +682,8 @@ public class AIController : Controller
                     //Although the collider is a square, this math acts like its a sphere. This works since the actual collider is larger.
                     RaycastHit hit2;
 
-                    if (Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget + perpendicular.normalized * 1.1f, out hit, eyesight, layerMask) && hit.transform.gameObject == target ||
-                        Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget + perpendicular.normalized * -1.1f, out hit2, eyesight, layerMask) && hit2.transform.gameObject == target)
+                    if (Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget + perpendicular.normalized * 1.1f, out hit, eyesight, layerMask) && hit.transform.gameObject.tag == "Player" ||
+                        Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget + perpendicular.normalized * -1.1f, out hit2, eyesight, layerMask) && hit2.transform.gameObject.tag == "Player")
                     {
                         sightCache = true;
                         sightCacheTimer = Time.time;
@@ -702,6 +703,113 @@ public class AIController : Controller
             return (sightCache); //Returns the last check if this function was called in the past half second.
     }
 
+    /// <summary>
+    /// Checks to see if the enemy can see any player.
+    /// </summary>
+    /// <returns></returns>
+    public virtual bool CanSeePlayer()
+    {
+        if (Time.time > sightCacheTimer + sightCacheDelay)
+        {
+            //Doesn't draw the FOV for each player.
+            if (debugMode)
+            {
+                for (int i = 0; i < 20; i++)
+                {
+                    Debug.DrawLine(
+                        new Vector3(
+                            3 * Mathf.Sin((bodyFieldOfView * (i - 10) / 10 + pawn.mover.body.transform.eulerAngles.y) * Mathf.PI / 180) + pawn.mover.body.transform.position.x,
+                            0.5f,
+                            3 * Mathf.Cos((bodyFieldOfView * (i - 10) / 10 + pawn.mover.body.transform.eulerAngles.y) * Mathf.PI / 180) + pawn.mover.body.transform.position.z),
+                        new Vector3(
+                            3 * Mathf.Sin((bodyFieldOfView * (i - 9) / 10 + pawn.mover.body.transform.eulerAngles.y) * Mathf.PI / 180) + pawn.mover.body.transform.position.x,
+                            0.5f,
+                            3 * Mathf.Cos((bodyFieldOfView * (i - 9) / 10 + pawn.mover.body.transform.eulerAngles.y) * Mathf.PI / 180) + pawn.mover.body.transform.position.z),
+                        Color.red, sightCacheDelay);
+                    Debug.DrawLine(
+                        new Vector3(
+                            4 * Mathf.Sin((turretFieldOfView * (i - 10) / 10 + pawn.mover.turret.transform.eulerAngles.y) * Mathf.PI / 180) + pawn.mover.turret.transform.position.x,
+                            0.5f,
+                            4 * Mathf.Cos((turretFieldOfView * (i - 10) / 10 + pawn.mover.turret.transform.eulerAngles.y) * Mathf.PI / 180) + pawn.mover.turret.transform.position.z),
+                        new Vector3(
+                            4 * Mathf.Sin((turretFieldOfView * (i - 9) / 10 + pawn.mover.turret.transform.eulerAngles.y) * Mathf.PI / 180) + pawn.mover.turret.transform.position.x,
+                            0.5f,
+                            4 * Mathf.Cos((turretFieldOfView * (i - 9) / 10 + pawn.mover.turret.transform.eulerAngles.y) * Mathf.PI / 180) + pawn.mover.turret.transform.position.z),
+                        Color.red, sightCacheDelay);
+                }
+            }
+            //Loops through each player.
+            foreach (PlayerController _targetController in GameManager.instance.players)
+            {
+                GameObject _target = _targetController.pawn.GetComponent<TankMover>().turret;
+
+                // Find the vector from the AI to the target.
+                Vector3 aiToTarget = _target.transform.position - pawn.mover.turret.transform.position;
+                // Find the angle between the direction our AI is facing and the vector to the target in 2D space.
+                float angleToTargetFromBody = Vector2.Angle(new Vector2(aiToTarget.x, aiToTarget.z), new Vector2(pawn.mover.body.transform.forward.x, pawn.mover.body.transform.forward.z));
+                float angleToTargetFromTurret = Vector2.Angle(new Vector2(aiToTarget.x, aiToTarget.z), new Vector2(pawn.mover.turret.transform.forward.x, pawn.mover.turret.transform.forward.z)); //Need to have the turret angle seperate from the body, otherwise stuff gets weird.
+
+                //Draws a line to each player.
+                if (debugMode)
+                {
+                    RaycastHit hit;
+                    Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget, out hit);
+                    Debug.DrawLine(pawn.mover.turret.transform.position, pawn.mover.turret.transform.position + (aiToTarget.normalized * hit.distance), Color.red, sightCacheDelay);
+                }
+
+                //Checks to see if the player is inside the field of view.
+                if (
+                    (angleToTargetFromBody <= bodyFieldOfView &&
+                    angleToTargetFromBody >= -bodyFieldOfView) ||
+                    (angleToTargetFromTurret <= turretFieldOfView &&
+                    angleToTargetFromTurret >= -turretFieldOfView))
+                {
+                    RaycastHit hit;
+
+                    //This creates a layer mask that will only collide against Projectiles and Pickups (layers 9 & 10).
+                    int layerMask = 1 << 9 << 10;
+                    layerMask = ~layerMask; //This inverses the layermask, meaning the raycast will not collide against projectiles and pickups.
+
+                    //If the raycast hits something, then check to see if it's the player.
+                    //Returns true if the raycast hits a player.
+                    if (Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget, out hit, eyesight, layerMask) && hit.transform.gameObject.tag == "Player")
+                    {
+                        //If it didn't hit a wall, then there must be line of sight for the player.
+                        sightCache = true;
+                        sightCacheTimer = Time.time;
+                        target = _targetController.pawn.gameObject;
+                        lastTargetLocation = _target.transform.position; //Saves the position of the player.
+                        return true;
+                    }
+                    else
+                    {
+                        Vector3 perpendicular = new Vector3(-1, aiToTarget.y, aiToTarget.x / aiToTarget.z); //This gets the perpendicular vector to the line between the AI and the player.
+
+                        //Adds the perpendicular of the line with a magnitude equal to the radius of the enemy to the line between the player and the AI. this makes it so the line is from the AI to the left and right sides of the player that the AI is facing.
+                        //Although the collider is a square, this math acts like its a sphere. This works since the actual collider is larger.
+                        RaycastHit hit2;
+
+                        if (Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget + perpendicular.normalized * 1.1f, out hit, eyesight, layerMask) && hit.transform.gameObject.tag == "Player" ||
+                            Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget + perpendicular.normalized * -1.1f, out hit2, eyesight, layerMask) && hit2.transform.gameObject.tag == "Player")
+                        {
+                            sightCache = true;
+                            sightCacheTimer = Time.time;
+                            lastTargetLocation = _target.transform.position; //Saves the position of the player
+                            target = _targetController.pawn.gameObject;
+                            return true; //One of the raycasts hit the player. That means the player is actively peeking around a corner. This prevents the player from aranging themselves to somehow shoot the enemy while the AI thinks there behind a wall.
+                        }
+                    }
+                }          
+            }
+
+            //If there are no players in view, return false.
+            sightCache = false;
+            sightCacheTimer = Time.time;
+            return false;
+        }
+        else
+            return (sightCache); //Returns the last check if this function was called in the past half second.
+    }
 
     /// <summary>
     /// Checks to see if the AI controller is able to see its target, ignoring FOV restrictions
@@ -720,7 +828,7 @@ public class AIController : Controller
 
         //If the raycast hits something, then check to see if it's the player.
         //Returns true if the raycast hits a player.
-        if (Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget, out hit, eyesight, layerMask) && hit.transform.gameObject == target)
+        if (Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget, out hit, eyesight, layerMask) && hit.transform.gameObject.tag == "Player")
         {
             //If it didn't hit a wall, then there must be line of sight for the player.
             sightCache = true;
@@ -736,8 +844,8 @@ public class AIController : Controller
             //Although the collider is a square, this math acts like its a sphere. This works since the actual collider is larger.
             RaycastHit hit2;
 
-            if (Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget + perpendicular.normalized * 1.1f, out hit, eyesight, layerMask) && hit.transform.gameObject == target ||
-                Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget + perpendicular.normalized * -1.1f, out hit2, eyesight, layerMask) && hit2.transform.gameObject == target)
+            if (Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget + perpendicular.normalized * 1.1f, out hit, eyesight, layerMask) && hit.transform.gameObject.tag == "Player" ||
+                Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget + perpendicular.normalized * -1.1f, out hit2, eyesight, layerMask) && hit2.transform.gameObject.tag == "Player")
             {
                 sightCache = true;
                 sightCacheTimer = Time.time;
@@ -751,6 +859,73 @@ public class AIController : Controller
                 return false; //The raycast did not hit the player.
             }
         }
+    }
+
+    /// <summary>
+    /// Checks to see if the enemy can see any player, even outside the FOV.
+    /// </summary>
+    /// <returns></returns>
+    public virtual bool CanSeePlayerNoFOV()
+    {
+        if (Time.time > sightCacheTimer + sightCacheDelay)
+        {
+            //Loops through each player.
+            foreach (PlayerController _targetController in GameManager.instance.players)
+            {
+                GameObject _target = _targetController.pawn.GetComponent<TankMover>().turret;
+
+
+
+                // Find the vector from the AI to the target.
+                Vector3 aiToTarget = _target.transform.position - pawn.mover.turret.transform.position;
+                // Find the angle between the direction our AI is facing and the vector to the target in 2D space.
+                float angleToTargetFromBody = Vector2.Angle(new Vector2(aiToTarget.x, aiToTarget.z), new Vector2(pawn.mover.body.transform.forward.x, pawn.mover.body.transform.forward.z));
+                float angleToTargetFromTurret = Vector2.Angle(new Vector2(aiToTarget.x, aiToTarget.z), new Vector2(pawn.mover.turret.transform.forward.x, pawn.mover.turret.transform.forward.z)); //Need to have the turret angle seperate from the body, otherwise stuff gets weird.
+
+                RaycastHit hit;
+
+                //This creates a layer mask that will only collide against Projectiles and Pickups (layers 9 & 10).
+                int layerMask = 1 << 9 << 10;
+                layerMask = ~layerMask; //This inverses the layermask, meaning the raycast will not collide against projectiles and pickups.
+
+                //If the raycast hits something, then check to see if it's the player.
+                //Returns true if the raycast hits a player.
+                if (Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget, out hit, eyesight, layerMask) && hit.transform.gameObject.tag == "Player")
+                {
+                    //If it didn't hit a wall, then there must be line of sight for the player.
+                    sightCache = true;
+                    sightCacheTimer = Time.time;
+                    target = _targetController.pawn.gameObject;
+                    lastTargetLocation = _target.transform.position; //Saves the position of the player.
+                    return true;
+                }
+                else
+                {
+                    Vector3 perpendicular = new Vector3(-1, aiToTarget.y, aiToTarget.x / aiToTarget.z); //This gets the perpendicular vector to the line between the AI and the player.
+
+                    //Adds the perpendicular of the line with a magnitude equal to the radius of the enemy to the line between the player and the AI. this makes it so the line is from the AI to the left and right sides of the player that the AI is facing.
+                    //Although the collider is a square, this math acts like its a sphere. This works since the actual collider is larger.
+                    RaycastHit hit2;
+
+                    if (Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget + perpendicular.normalized * 1.1f, out hit, eyesight, layerMask) && hit.transform.gameObject.tag == "Player" ||
+                        Physics.Raycast(pawn.mover.turret.transform.position, aiToTarget + perpendicular.normalized * -1.1f, out hit2, eyesight, layerMask) && hit2.transform.gameObject.tag == "Player")
+                    {
+                        sightCache = true;
+                        sightCacheTimer = Time.time;
+                        lastTargetLocation = _target.transform.position; //Saves the position of the player
+                        target = _targetController.pawn.gameObject;
+                        return true; //One of the raycasts hit the player. That means the player is actively peeking around a corner. This prevents the player from aranging themselves to somehow shoot the enemy while the AI thinks there behind a wall.
+                    }
+                }
+            }
+
+            //If there are no players in view, return false.
+            sightCache = false;
+            sightCacheTimer = Time.time;
+            return false;
+        }
+        else
+            return (sightCache); //Returns the last check if this function was called in the past half second.
     }
 
     public float DistanceFromTarget()

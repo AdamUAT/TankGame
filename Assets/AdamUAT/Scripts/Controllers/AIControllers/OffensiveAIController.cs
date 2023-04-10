@@ -138,7 +138,7 @@ public class OffensiveAIController : AIController
         }
 
         //Checks to see if the AI can see the player
-        if(CanSee(target.GetComponent<TankMover>().turret))
+        if(CanSeePlayer())
         {
             ChangeState(AIState.Chase);
             return; //Do not 

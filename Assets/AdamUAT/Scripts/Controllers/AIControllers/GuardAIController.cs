@@ -85,7 +85,7 @@ public class GuardAIController : AIController
 
     protected override void DoScanState()
     {
-        if (CanSee(target.GetComponent<TankMover>().turret))
+        if (CanSeePlayer())
         {
             ChangeState(AIState.Attack);
         }
@@ -96,7 +96,7 @@ public class GuardAIController : AIController
 
     protected override void DoAlertState()
     {
-        if (CanSee(target.GetComponent<TankMover>().turret))
+        if (CanSeePlayer())
         {
             ChangeState(AIState.Chase);
         }
@@ -115,7 +115,7 @@ public class GuardAIController : AIController
 
     protected void DoAttackState()
     {
-        if (CanSee(target.GetComponent<TankMover>().turret))
+        if (CanSeePlayer())
         {
             lastStateChangeTime = Time.time; //Tells the timer when the last time the enemy saw the player was.
 

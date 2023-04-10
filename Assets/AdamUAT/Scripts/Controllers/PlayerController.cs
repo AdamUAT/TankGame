@@ -14,6 +14,9 @@ public class PlayerController : Controller
 
     //Lives is stored in the playerController because it is not deleted on the pawn's death.
     public int lives;
+    public long score;
+    public UI_Object hud;
+    public GameObject hudPrefab;
 
     private void Start()
     {
@@ -22,6 +25,17 @@ public class PlayerController : Controller
         Cursor.visible = false;
 
         lives = 3;
+    }
+
+    public void IncreaseScore(long addScore)
+    {
+        score += addScore;
+        hud.UpdateScore(score);
+    }
+
+    public void CreateHUD()
+    {
+        hud = Instantiate(hudPrefab).GetComponent<UI_Object>();
     }
 
     private void Update()

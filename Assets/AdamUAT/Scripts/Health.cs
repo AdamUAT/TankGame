@@ -8,31 +8,32 @@ public class Health : MonoBehaviour
     public float currentHealth;
     public float maxHealth;
 
-    private GameObject healthBar;
+    [HideInInspector]
+    public GameObject healthBar;
 
     // Start is called before the first frame update
     void Start()
     {
         currentHealth = maxHealth;
 
-        //Makes sure the pawn is a player.
+        
+        //Makes sure the pawn is an enemy.
         AIController controller = GetComponent<AIController>();
-        if (controller == null)
+        if (controller != null)
         {
-            healthBar = GameObject.Find("GamePlay");
-            if (healthBar == null)
-            {
-                Debug.LogWarning("HealthComponent could not find the health bar.");
-            }
-            else
-            {
-                UpdateHealthBar();
-            }
+            healthBar = transform.Find("Canvas").Find("HealthBar").gameObject;
         }
         else
         {
-            //Assign the healthbar if it is an enemy
-            healthBar = transform.Find("Canvas").Find("HealthBar").gameObject;
+            //Finds the controller that matches this health component.
+            foreach(PlayerController playerController in GameManager.instance.players)
+            {
+                if(playerController.pawn.health == this)
+                {
+                    healthBar = playerController.hud.gameObject;
+                    UpdateHealthBar();
+                }
+            }
         }
     }
 
@@ -67,6 +68,14 @@ public class Health : MonoBehaviour
         AIController controller = GetComponent<AIController>();
         if (controller != null)
         {
+            //Find the player that killed this pawn and give the player score.
+            foreach(PlayerController playerController in GameManager.instance.players)
+            {
+                if(playerController.pawn == source)
+                {
+                    playerController.IncreaseScore(50);
+                }
+            }
             GameManager.instance.npcs.Remove(controller);
         }
         else

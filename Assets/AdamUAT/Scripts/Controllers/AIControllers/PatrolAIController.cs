@@ -104,7 +104,7 @@ public class PatrolAIController : AIController
     protected void DoPatrolState()
     {
         //Checks to see if the AI can see the player
-        if (CanSee(target.GetComponent<TankMover>().turret))
+        if (CanSeePlayer())
         {
             ChangeState(AIState.Chase);
             return; //Do not 
@@ -131,7 +131,7 @@ public class PatrolAIController : AIController
 
     protected override void DoAlertState()
     {
-        if (CanSee(target.GetComponent<TankMover>().turret))
+        if (CanSeePlayer())
         {
             ChangeState(AIState.Chase);
         }
@@ -163,7 +163,7 @@ public class PatrolAIController : AIController
     {
         if (pawn.health.currentHealth / pawn.health.maxHealth > fleeThreshold)
         {
-            if (CanSeeNoFOV(target.GetComponent<TankMover>().turret)) //Checks to see if the player was chasing this pawn to the health pickup. If so, then it resumes the chase.
+            if (CanSeePlayerNoFOV()) //Checks to see if the player was chasing this pawn to the health pickup. If so, then it resumes the chase.
             {
                 ChangeState(AIState.Chase);
             }
@@ -178,7 +178,7 @@ public class PatrolAIController : AIController
         }
 
         //If the player is chasing the tank while fleeing, the tank will still shoot back.
-        if (CanSeeNoFOV(target.GetComponent<TankMover>().turret))
+        if (CanSeePlayerNoFOV())
         {
             pawn.mover.TurretRotateTowards(target.transform.position, fastTurretMoveSpeed);
 
@@ -196,7 +196,7 @@ public class PatrolAIController : AIController
 
     protected override void DoSearchState()
     {
-        if (CanSee(target.GetComponent<TankMover>().turret))
+        if (CanSeePlayer())
         {
             ChangeState(AIState.Chase);
         }

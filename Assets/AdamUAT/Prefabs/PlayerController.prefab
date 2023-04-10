@@ -51,3 +51,7 @@ MonoBehaviour:
   shootKey: 323
   pauseKey: 27
   lives: 0
+  score: 0
+  hud: {fileID: 0}
+  hudPrefab: {fileID: 6593246420457501640, guid: e9bc8fbd2d2bb61438a439eb15026faf,
+    type: 3}

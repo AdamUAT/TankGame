@@ -16,9 +16,13 @@ public class UI_Object : MonoBehaviour
     [SerializeField]
     private TMP_InputField seed;
     [SerializeField]
+    private Slider playerCount;
+    [SerializeField]
     private List<RawImage> lives;
     [SerializeField]
     private Slider healthBar;
+    [SerializeField]
+    private TextMeshProUGUI score;
 
     void Start()
     {
@@ -68,9 +72,9 @@ public class UI_Object : MonoBehaviour
 #endif
         Application.Quit();
     }
-    public void MainMenuToPlayerCount()
+    public void MainMenuToMapSettings()
     {
-        GameManager.instance.GameStateChange(GameManager.GameState.PlayerCount);
+        GameManager.instance.GameStateChange(GameManager.GameState.MapSettings);
     }
     public void PlayerCountToMapSettings()
     {
@@ -126,6 +130,10 @@ public class UI_Object : MonoBehaviour
             {
                 GameManager.instance.customSeed = int.Parse(seed.text);
             }
+        }
+        if(playerCount != null)
+        {
+            GameManager.instance.playerCount = (int)playerCount.value;
         }
 
         SceneManager.LoadScene("MapTest");
@@ -191,5 +199,10 @@ public class UI_Object : MonoBehaviour
     public void UpdateHealthBar(float percentHealth)
     {
         healthBar.value = percentHealth;
+    }
+
+    public void UpdateScore(long newScore)
+    {
+        score.text = newScore.ToString();
     }
 }

@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// The function to spawn the player and link the pawn to the controller.
     /// </summary>
-    public void SpawnPlayer()
+    public void SpawnPlayers()
     {
         GameObject newPlayerObj = Instantiate(playerControllerPrefab, Vector3.zero, Quaternion.identity);
         GameObject newPawnObj = Instantiate(tankPawnPrefab, FindObjectOfType<MapGenerator>().RandomRoom().playerSpawn.transform.position, Quaternion.identity);
@@ -61,8 +61,47 @@ public class GameManager : MonoBehaviour
 
         newController.pawn = newPawn;
 
+        newController.CreateHUD();
+
         //Add the spawned player to the variable so it can be accessed from anywhere. 
         players.Add(newController);
+
+        //spawns the camera and caches it.
+        GameObject newCamera = newPawn.GetComponent<CameraController>().InstantiateCamera(newController);
+
+
+
+        //See if it is two-players.
+        if (playerCount > 1)
+        {
+            //Modifies the camera so it takes up the left half of the screen.
+            Camera cameraComponent = newCamera.GetComponent<Camera>();
+            cameraComponent.rect = new Rect(0, 0, 0.5f, 1);
+
+            newPlayerObj = Instantiate(playerControllerPrefab, Vector3.zero, Quaternion.identity);
+            newPawnObj = Instantiate(tankPawnPrefab, FindObjectOfType<MapGenerator>().RandomRoom().playerSpawn.transform.position, Quaternion.identity);
+
+            newController = newPlayerObj.GetComponent<PlayerController>();
+            newPawn = newPawnObj.GetComponent<TankPawn>();
+
+            newController.pawn = newPawn;
+            newController.moveForwardKey = KeyCode.UpArrow;
+            newController.moveBackwardKey = KeyCode.DownArrow;
+            newController.rotateClockwiseKey = KeyCode.RightArrow;
+            newController.rotateCounterClockwiseKey = KeyCode.LeftArrow;
+            newController.shootKey = KeyCode.Mouse1;
+
+            newController.CreateHUD();
+
+            //Add the spawned player to the variable so it can be accessed from anywhere. 
+            players.Add(newController);
+
+            //Spawns the second camera and sets it for the right half of the screen.
+            newCamera = newPawn.GetComponent<CameraController>().InstantiateCamera(newController);
+            cameraComponent = newCamera.GetComponent<Camera>();
+            cameraComponent.rect = new Rect(0.5f, 0, 0.5f, 1);
+
+        }
     }
 
     /// <summary>
@@ -73,6 +112,8 @@ public class GameManager : MonoBehaviour
 
         GameObject newPawnObj = Instantiate(tankPawnPrefab, FindObjectOfType<MapGenerator>().RandomRoom().playerSpawn.transform.position, Quaternion.identity);
         TankPawn newPawn = newPawnObj.GetComponent<TankPawn>();
+        //spawns the camera and caches it.
+        GameObject newCamera = newPawn.GetComponent<CameraController>().InstantiateCamera();
 
         //Finds which controller is missing a pawn and assign it the new pawn.
         foreach (PlayerController playerController in players)
@@ -82,13 +123,22 @@ public class GameManager : MonoBehaviour
                 if (newPawn != null)
                 {
                     playerController.pawn = newPawn;
+
+                    //Connects the new camera to the HUD
+                    Canvas hudCanvas = playerController.hud.GetComponent<Canvas>();
+                    hudCanvas.worldCamera = newCamera.GetComponent<Camera>();
                 }
                 else
                     Debug.Log("The TankPawn prefab is missing it's TankPawn script!");
-
-                break;
+            }
+            else
+            {
+                //This is the alive tank, so we set the respawned tank's camera to the opposite of the alive tank's
+                Camera cameraComponent = newCamera.GetComponent<Camera>();
+                cameraComponent.rect = new Rect(0.5f - playerController.pawn.cameraController.camera.GetComponent<Camera>().rect.x, 0, 0.5f, 1);
             }
         }
+        
 
         foreach (AIController enemy in npcs)
         {
@@ -133,6 +183,8 @@ public class GameManager : MonoBehaviour
     public bool isDaySeed = false;
     [HideInInspector]
     public int customSeed = 0;
+    [HideInInspector]
+    public int playerCount = 0;
     [SerializeField]
     private AudioSource soundtrackAudioSource;
     [SerializeField]
