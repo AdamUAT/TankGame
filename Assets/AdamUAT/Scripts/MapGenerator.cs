@@ -110,7 +110,7 @@ public class MapGenerator : MonoBehaviour
         //After the map is generated, update the globalNavMesh.
         globalNavMesh.BuildNavMesh();
 
-        GameManager.instance.SpawnPlayer();
+        GameManager.instance.SpawnPlayers();
 
         //SpawnEnemies must be after the player is spawned so they can target the player.
         foreach(Room room in roomGrid)

@@ -5,19 +5,25 @@ using static UnityEngine.GraphicsBuffer;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject cameraPrefab;
-    private GameObject camera;
+    [HideInInspector]
+    public GameObject camera;
     [SerializeField]
     private GameObject cameraPosition;
     [SerializeField]
     private float cameraLerpSpeed = 0.3f;
     [SerializeField]
     private float cameraRotationSpeed = 30;
+    [SerializeField]
+    private GameObject cameraPrefab;
 
     private void Start()
     {
+    }
+
+    public GameObject InstantiateCamera()
+    {
         camera = Instantiate(cameraPrefab, cameraPosition.transform.position, cameraPosition.transform.rotation); //Innitial spawn of the camera.
+        return (camera);
     }
 
     //This update is only for cameras, as it helps stop making things jittery.

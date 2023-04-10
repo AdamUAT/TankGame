@@ -413,6 +413,7 @@ MonoBehaviour:
   columns: {fileID: 0}
   rows: {fileID: 0}
   seed: {fileID: 0}
+  playerCount: {fileID: 0}
   lives:
   - {fileID: 447817116}
   - {fileID: 2007895310}
@@ -1641,7 +1642,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 35.35
+  m_fontSize: 40.1
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1942,6 +1943,7 @@ MonoBehaviour:
   columns: {fileID: 0}
   rows: {fileID: 0}
   seed: {fileID: 0}
+  playerCount: {fileID: 0}
   lives: []
   healthBar: {fileID: 0}
 --- !u!114 &940482510
@@ -2098,6 +2100,7 @@ MonoBehaviour:
   isRandomSeed: 1
   isDaySeed: 0
   customSeed: 0
+  playerCount: 0
   soundtrackAudioSource: {fileID: 0}
   uiAudioSource: {fileID: 0}
   mainMenu: {fileID: 0}
@@ -2795,6 +2798,7 @@ MonoBehaviour:
   columns: {fileID: 0}
   rows: {fileID: 0}
   seed: {fileID: 0}
+  playerCount: {fileID: 0}
   lives: []
   healthBar: {fileID: 0}
 --- !u!114 &1569517038
@@ -2955,8 +2959,8 @@ MonoBehaviour:
   - roomPrefab: {fileID: 121816, guid: 5139ab8e870c69b4889ddfada2d1f90e, type: 3}
     weight: 1
   - roomPrefab: {fileID: 121816, guid: 70d9d716f8f4c724386257a9db9032d6, type: 3}
-    weight: 1
-  gridSize: {x: 3, y: 3}
+    weight: 10000
+  gridSize: {x: 1, y: 1}
   roomDimensions: {x: 40, y: 40}
   patrolPrefabs:
   - enemyPrefab: {fileID: 8179522848088298613, guid: dd7f6cff4d5c69f4099c77940ddf6a4d,
